@@ -1,0 +1,32 @@
+# Flutter/Dart
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.metadata
+pubspec.lock
+
+# IDEs
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+
+# Android
+android/local.properties
+.gradle/
+
+# iOS
+ios/Pods/
+*.xcworkspace
+DerivedData/
+
+# Firebase/Secrets
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+firebase.json

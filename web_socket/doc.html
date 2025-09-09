@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socket.io User Guide for Flutter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #333;
+        }
+
+        p {
+            line-height: 1.6;
+            color: #666;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 4px;
+            color: #c7254e;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .endpoint {
+            background: #eef;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+
+        .code-block {
+            background: #333;
+            color: #f8f8f2;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Socket.io User Guide for Flutter</h1>
+
+        <div class="section">
+            <h2>Connecting to the Server</h2>
+            <p>To connect to the Socket.io server using Flutter, you need to use the <code>socket_io_client</code>
+                package and provide the following headers: <code>userId</code>, <code>type</code>, and
+                <code>token</code>.
+            </p>
+            <div class="code-block">
+                <pre>
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+
+void main() {
+  IO.Socket socket = IO.io('http://localhost:4000', <String, dynamic>{
+    'transports': ['websocket'],
+    'extraHeaders': {
+      'userid': 'yourUserId',
+      'type': 'yourType',
+      'token': 'yourToken'
+    }
+  });
+
+  socket.on('connect', (_) {
+    print('Connected');
+    socket.on('connected', (data) => print('Connected: \$data'));
+  });
+
+  socket.on('error', (message) => print('Error: \$message'));
+
+  // Handle disconnection
+  socket.on('disconnect', (_) => print('Disconnected'));
+}
+</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Events</h2>
+
+            <div class="endpoint">
+                <h3>newRequest</h3>
+                <p>Send a new request to another user.</p>
+                <div class="code-block">
+                    <pre>
+void sendNewRequest(IO.Socket socket) {
+  socket.emit('newRequest', {
+    'userId': 'targetUserId',
+    'userType': 'targetType',
+    'requestType': 'requestType',
+    'data': { /* request data */ }
+  });
+
+  socket.on('request', (data) {
+    print('New request received: \$data');
+  });
+}
+</pre>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>accept</h3>
+                <p>Accept a received request.</p>
+                <div class="code-block">
+                    <pre>
+void acceptRequest(IO.Socket socket) {
+  socket.emit('accept', {
+    'userId': 'targetUserId',
+    'userType': 'targetType',
+    'requestType': 'requestType',
+    'data': { /* acceptance data */ }
+  });
+
+  socket.on('accepted', (data) {
+    print('Request accepted: \$data');
+  });
+}
+</pre>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>startChatRequest</h3>
+                <p>Start a chat with another user.</p>
+                <div class="code-block">
+                    <pre>
+void startChatRequest(IO.Socket socket) {
+  socket.emit('startChatRequest', {
+    'userId': 'targetUserId',
+    'userType': 'targetType',
+    'requestType': 'requestType',
+    'data': { /* chat data */ }
+  });
+
+  socket.on('openChat', (data) {
+    print('Chat started: \$data');
+  });
+}
+</pre>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>reject</h3>
+                <p>Reject a received request.</p>
+                <div class="code-block">
+                    <pre>
+void rejectRequest(IO.Socket socket) {
+  socket.emit('reject', {
+    'userId': 'targetUserId',
+    'userType': 'targetType',
+    'requestType': 'requestType',
+    'data': { /* rejection data */ }
+  });
+
+  socket.on('rejected', (data) {
+    print('Request rejected: \$data');
+  });
+}
+</pre>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>userBusy</h3>
+                <p>Notify that the user is busy.</p>
+                <div class="code-block">
+                    <pre>
+void notifyUserBusy(IO.Socket socket) {
+  socket.emit('userBusy', {
+    'userId': 'targetUserId',
+    'userType': 'targetType',
+    'message': 'User is busy'
+  });
+
+  socket.on('busy', (data) {
+    print('User busy notification received: \$data');
+  });
+}
+</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Handling Errors</h2>
+            <p>All errors will be emitted with the event name <code>error</code>.</p>
+            <div class="code-block">
+                <pre>
+socket.on('error', (message) {
+  print('Error: \$message');
+});
+</pre>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
