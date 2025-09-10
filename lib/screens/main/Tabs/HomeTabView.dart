@@ -121,8 +121,8 @@ class HomeTabView extends StatelessWidget {
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            homePopup(context);
-                            // state.reloadComunication(isReload: true);
+
+                            state.reloadComunication(isReload: true);
                           },
                           child: state.reloading
                               ? const SizedBox(

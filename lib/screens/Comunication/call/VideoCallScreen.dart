@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fore_astro_2/Components/RequestBox.dart';
@@ -24,7 +25,6 @@ class VideoCallScreen extends StatefulWidget {
     required this.communicationId,
     required this.user_wallet,
   }) : super(key: key);
-
   final String callID;
   final String userid;
   final String communicationId;
@@ -43,37 +43,40 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
   @override
   void initState() {
-    super.initState();
     final userProfile = context.read<UserProfileProvider>().userProfileModel;
 
     final chatRatePerMinute =
-        double.tryParse(userProfile?.videoChargesPerMin?.toString() ?? '1') ?? 1.0;
+        double.tryParse(userProfile?.videoChargesPerMin?.toString() ?? '1') ??
+            1.0;
 
     _remainingSeconds = chatRatePerMinute > 0
         ? (widget.user_wallet / chatRatePerMinute * 60).toInt()
         : 0;
 
     context.read<SessionProvider>().newSession(RequestType.Chat);
-    _acceptRequest();
+    requestToAccpted();
     _startCountdownTimer();
+    super.initState();
   }
 
   void _startCountdownTimer() {
     _timer?.cancel();
+    print("Starting countdown timer with $_remainingSeconds seconds.");
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
       if (_remainingSeconds > 0) {
         setState(() {
           _remainingSeconds--;
+          print("Remaining seconds: $_remainingSeconds");
         });
 
         if (_remainingSeconds == 120 && !_isBeeping) {
           _isBeeping = true;
           await _playBeepSound();
-          _isBeeping = false;
+          _isBeeping = false; // Reset beeping flag
         }
       } else {
         timer.cancel();
-        _endCallAndNavigate();
+        print("Countdown finished.");
       }
     });
   }
@@ -86,16 +89,20 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         await Future.delayed(const Duration(milliseconds: 500));
       }
     } catch (e) {
-      debugPrint('Audio play error: $e');
+      print('Audio play error: $e');
     }
   }
 
-  void _acceptRequest() async {
+  String formatTime(int seconds) {
+    final minutes = seconds ~/ 60;
+    final remainingSeconds = seconds % 60;
+    return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
+  }
+
+  requestToAccpted() async {
     try {
       await CommunicationRepo.acceptOrRejectRequest(
-        communicationId: widget.communicationId,
-        status: "accept",
-      );
+          communicationId: widget.communicationId, status: "accept");
       context.read<CommunicationProvider>().reloadComunication();
     } catch (e) {
       showToast(e.toString());
@@ -104,29 +111,9 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         userType: "user",
         senderId: widget.userid,
         requestType: "video",
-        message: "Internal error on astrologer side. Try again.",
+        message: "Internal error On Astrologer Side. Try Again",
       );
     }
-  }
-
-  void _endCallAndNavigate() {
-    if (_isSessionEnded) return;
-    _isSessionEnded = true;
-
-    context.read<SocketProvider>().onWorkEnd();
-    _timer?.cancel();
-    _player.dispose();
-
-    navigateme.pushAndRemoveUntil(
-      routeMe(EndVideoSession(communicationId: widget.communicationId)),
-          (Route<dynamic> route) => false,
-    );
-  }
-
-  String formatTime(int seconds) {
-    final minutes = seconds ~/ 60;
-    final remainingSeconds = seconds % 60;
-    return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
   }
 
   @override
@@ -151,27 +138,29 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                 .userProfileModel!
                 .name
                 .toString(),
-            callID: widget.callID,
             events: ZegoUIKitPrebuiltCallEvents(
               user: ZegoCallUserEvents(
                 onEnter: (p) {
-                  showToast("${p.name} joined the call");
+                  showToast(p.name.toString() + " join in call");
                   context.read<SessionProvider>().newSession(RequestType.Video);
-                },
-                onLeave: (p) {
-                  showToast("${p.name} left the call");
-                  // If only self remains → end the call
-                  if (ZegoUIKit().getAllUsers().length <= 1) {
-                    _endCallAndNavigate();
-                  }
                 },
               ),
               onCallEnd: (event, defaultAction) {
-                _endCallAndNavigate();
+                showToast("Video Call End");
+                context.read<SocketProvider>().onWorkEnd();
+                navigateme.pop();
+                navigateme.pushAndRemoveUntil(
+                  routeMe(
+                      EndVideoSession(communicationId: widget.communicationId)),
+                      (Route<dynamic> route) => false,
+                );
+                // navigateme.push(routeMe(const EndVideoSession()));
               },
             ),
-            config: ZegoUIKitPrebuiltCallConfig.groupVideoCall()
-              ..layout = ZegoLayout.pictureInPicture(),
+            callID: widget.callID,
+            config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+              ..layout = ZegoLayout.pictureInPicture()
+              ..beauty,
           ),
           SizedBox(
             height: 60,
@@ -181,67 +170,64 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
               surfaceTintColor: Colors.transparent,
               actions: [
                 IconButton(
-                  onPressed: () {
-                    navigateme.push(
-                      routeMe(KundliForm(
+                    onPressed: () {
+                      navigateme.push(routeMe(KundliForm(
                         id: int.parse(widget.userid),
-                      )),
-                    );
-                  },
-                  icon: const Icon(
-                    FontAwesomeIcons.info,
-                    color: Colors.white,
-                  ),
-                ),
+                      )));
+                    },
+                    icon: const Icon(
+                      FontAwesomeIcons.info,
+                      color: Colors.white,
+                    ))
               ],
             ),
           ),
-          Positioned(
-            top: 10,
-            left: 10,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [
-                    Color.fromARGB(255, 125, 122, 122),
-                    Color.fromARGB(151, 234, 231, 227)
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    offset: const Offset(2, 4),
-                    blurRadius: 6,
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(
-                    Icons.timer_outlined,
-                    color: Colors.white,
-                    size: 24,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    formatTime(_remainingSeconds),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'RobotoMono',
-                      decoration: TextDecoration.none,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          // Positioned(
+          //   top: 10,
+          //   left: 10,
+          //   child: Container(
+          //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          //     decoration: BoxDecoration(
+          //       gradient: const LinearGradient(
+          //         colors: [
+          //           Color.fromARGB(255, 125, 122, 122),
+          //           Color.fromARGB(151, 234, 231, 227)
+          //         ],
+          //         begin: Alignment.topLeft,
+          //         end: Alignment.bottomRight,
+          //       ),
+          //       borderRadius: BorderRadius.circular(15),
+          //       boxShadow: [
+          //         BoxShadow(
+          //           color: Colors.black.withOpacity(0.2),
+          //           offset: const Offset(2, 4),
+          //           blurRadius: 6,
+          //         ),
+          //       ],
+          //     ),
+          //     child: Row(
+          //       mainAxisSize: MainAxisSize.min,
+          //       children: [
+          //         const Icon(
+          //           Icons.timer_outlined,
+          //           color: Colors.white,
+          //           size: 24,
+          //         ),
+          //         const SizedBox(width: 8),
+          //         Text(
+          //           formatTime(_remainingSeconds),
+          //           style: const TextStyle(
+          //             color: Colors.white,
+          //             fontSize: 24,
+          //             fontWeight: FontWeight.bold,
+          //             fontFamily: 'RobotoMono',
+          //             decoration: TextDecoration.none,
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );
