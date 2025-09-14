@@ -25,7 +25,7 @@ class UserProfileProvider with ChangeNotifier {
 
       String? mobile = prefs.getString("mobile");
       if (id == null && mobile == null) {
-        navigateme.pushReplacement(routeMe(LoginScreen()));
+        navigateme.pushReplacement(routeMe(const LoginScreen()));
         return false;
       }
 
@@ -33,7 +33,7 @@ class UserProfileProvider with ChangeNotifier {
 
       if (responseAuth.data['status'] == true) {
         if (responseAuth.data['data']['is_profile_created'] == false) {
-          navigateme.pushReplacement(routeMe(CompleteProfileScreen()));
+          navigateme.pushReplacement(routeMe(const CompleteProfileScreen()));
           return false;
         }
 
@@ -46,28 +46,34 @@ class UserProfileProvider with ChangeNotifier {
           if (userProfileModel?.isOnboardingCompleted == false) {
             navigateme.popUntil((route) => route.isFirst);
             navigateme
-                .pushReplacement(routeMe(AstroExamScreen(), isauth: true));
+                .pushReplacement(routeMe(const AstroExamScreen(), isauth: true));
           } else {
             if (_userProfileModel?.profileStatus == "pending") {
               navigateme.popUntil((route) => route.isFirst);
               navigateme
-                  .pushReplacement(routeMe(WettingScreen(), isauth: true));
-            } else {
+                  .pushReplacement(routeMe(WettingScreen(status: "pending",), isauth: true));
+            }  else if (_userProfileModel?.profileStatus == "rejected"){
+              navigateme.popUntil((route) => route.isFirst);
+              navigateme
+                  .pushReplacement(routeMe(WettingScreen(status:"rejected"), isauth: true));
+            }
+
+            else {
               navigateme.popUntil((route) => route.isFirst);
               navigateme
                   .pushReplacement(routeMe(HomeTabScreen(), isauth: true));
             }
           }
         } else {
-          navigateme.pushReplacement(routeMe(LoginScreen()));
+          navigateme.pushReplacement(routeMe(const LoginScreen()));
         }
       } else {
-        navigateme.pushReplacement(routeMe(LoginScreen()));
+        navigateme.pushReplacement(routeMe(const LoginScreen()));
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
         await prefs.clear();
-        navigateme.pushReplacement(routeMe(LoginScreen()));
+        navigateme.pushReplacement(routeMe(const LoginScreen()));
         return false;
       }
       print(e);

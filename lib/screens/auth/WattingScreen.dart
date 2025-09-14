@@ -12,7 +12,8 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class WettingScreen extends StatefulWidget {
-  const WettingScreen({super.key});
+  String? status;
+   WettingScreen({super.key, this.status});
 
   @override
   State<WettingScreen> createState() => _WettingScreenState();
@@ -69,10 +70,11 @@ class _WettingScreenState extends State<WettingScreen> {
                     const SizedBox(height: 40),
                     SizedBox(
                       width: context.windowWidth / 1.5,
-                      child: const Text(
-                        'Your profile has not yet been approved',
+                      child: Text(
+                        widget.status == "pending"?
+                        'Your profile has not yet been approved':"Your profile has been rejected",
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Color(0xFF201F1F),
                           fontSize: 18,
                           fontWeight: FontWeight.w500,

@@ -71,7 +71,7 @@ class _AstroExamScreenState extends State<AstroExamScreen> {
             curve: Curves.linear);
       } else {
         navigateme.popUntil((route) => route.isFirst);
-        navigateme.pushReplacement(routeMe(const WettingScreen()));
+        navigateme.pushReplacement(routeMe( WettingScreen(status: "pending",)));
       }
       setState(() {
         submitLoading = false;
