@@ -8,6 +8,7 @@ import 'package:fore_astro_2/core/extensions/Text.dart';
 import 'package:fore_astro_2/core/extensions/window.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
 import 'package:fore_astro_2/screens/pages/kundli/SearchLocation.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class BasicInfo extends StatelessWidget {
   final PlanetModel planetModel;
@@ -150,7 +151,7 @@ class BasicInfo extends StatelessWidget {
                               .replaceAll("_", " ")
                               .capitalize(),
                           content: data[keys[index]].toString(),
-                          textStyle: const TextStyle(
+                          textStyle: GoogleFonts.inter(
                               fontSize: 12, fontWeight: FontWeight.w500),
                           width: context.windowWidth,
                         ),

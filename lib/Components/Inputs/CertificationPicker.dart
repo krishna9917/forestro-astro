@@ -9,6 +9,7 @@ import 'package:fore_astro_2/constants/Assets.dart';
 import 'package:fore_astro_2/constants/ListofData.dart';
 import 'package:fore_astro_2/core/extensions/window.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CertificationPicker extends StatefulWidget {
   Function(List<PlatformFile>)? onSelect;
@@ -47,11 +48,11 @@ class _CertificationPickerState extends State<CertificationPicker> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
+           Padding(
             padding: EdgeInsets.only(left: 10, bottom: 8, top: 15),
             child: Text(
               "Certification",
-              style: TextStyle(
+              style: GoogleFonts.inter(
                 color: Color(0xFF353333),
                 fontSize: 17,
                 fontWeight: FontWeight.w600,
@@ -91,17 +92,17 @@ class _CertificationPickerState extends State<CertificationPicker> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  const Text(
+                   Text(
                     'Upload New File',
-                    style: TextStyle(
+                    style: GoogleFonts.inter(
                       color: Color(0xFFFF6600),
                       fontSize: 20,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
-                  const Text(
+                   Text(
                     '(Max. file size: 25 MB)',
-                    style: TextStyle(
+                    style: GoogleFonts.inter(
                       color: Color(0xFF515151),
                       fontSize: 13,
                       fontWeight: FontWeight.w400,

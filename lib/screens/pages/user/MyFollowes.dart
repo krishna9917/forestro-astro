@@ -6,6 +6,7 @@ import 'package:fore_astro_2/core/data/repository/profileRepo.dart';
 import 'package:fore_astro_2/core/helper/Navigate.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
 import 'package:fore_astro_2/screens/pages/kundli/KundliForm.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MyFollowersScreen extends StatefulWidget {
   const MyFollowersScreen({super.key});
@@ -105,7 +106,7 @@ class _MyFollowersScreenState extends State<MyFollowersScreen> {
                           textAlign: TextAlign.center,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
+                          style: GoogleFonts.inter(
                               color: Colors.black, fontWeight: FontWeight.bold),
                         ),
                       ),

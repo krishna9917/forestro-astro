@@ -10,6 +10,7 @@ import 'package:fore_astro_2/core/helper/Navigate.dart';
 import 'package:fore_astro_2/core/helper/helper.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
 import 'package:fore_astro_2/screens/auth/OtpScreen.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:phone_input/phone_input_package.dart';
@@ -116,9 +117,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       width: 120,
                     ),
                     const SizedBox(height: 20),
-                    const Text(
+                     Text(
                       "Welcome to Fore Astro Astrologer",
-                      style: TextStyle(
+                      style: GoogleFonts.inter(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                       ),
@@ -132,15 +133,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Padding(
+                               Padding(
                                 padding: EdgeInsets.only(left: 20),
                                 child: Text(
                                   "Phone No",
-                                  style: TextStyle(
+                                  style: GoogleFonts.inter(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16,
-                                    fontFamily: "inter",
                                   ),
                                 ),
                               ),
@@ -173,9 +173,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   );
                                 }
-                                return const Text(
+                                return  Text(
                                   "Continue Verification",
-                                  style: TextStyle(
+                                  style: GoogleFonts.inter(
                                     color: Colors.white,
                                   ),
                                 );
@@ -191,7 +191,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 children: <InlineSpan>[
                                   TextSpan(
                                       text: 'Terms and Conditions ',
-                                      style: TextStyle(
+                                      style: GoogleFonts.inter(
                                         color: AppColor.primary,
                                         decoration: TextDecoration.underline,
                                         decorationColor: AppColor.primary,
@@ -210,7 +210,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                   TextSpan(
                                       text: ' Privacy Policy',
-                                      style: TextStyle(
+                                      style: GoogleFonts.inter(
                                         color: AppColor.primary,
                                         decoration: TextDecoration.underline,
                                         decorationColor: AppColor.primary,
@@ -326,7 +326,7 @@ class LoginSocailBtn extends StatelessWidget {
             ),
             Text(
               title,
-              style: const TextStyle(
+              style:  GoogleFonts.inter(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
                 color: Color.fromARGB(255, 61, 61, 61),

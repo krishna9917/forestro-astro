@@ -8,6 +8,7 @@ import 'package:fore_astro_2/core/extensions/window.dart';
 import 'package:fore_astro_2/core/helper/Navigate.dart';
 import 'package:fore_astro_2/core/helper/helper.dart';
 import 'package:fore_astro_2/providers/bankAccoutProvider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class AddBankAccountScreen extends StatefulWidget {
@@ -168,7 +169,7 @@ class _AddBankAccountScreenState extends State<AddBankAccountScreen> {
                           },
                     child: Text(
                       loading ? "Saving Bank info.." : "Save Bank Details",
-                      style: TextStyle(fontSize: 18),
+                      style: GoogleFonts.inter(fontSize: 18),
                     ),
                   ),
                 ),

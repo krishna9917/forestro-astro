@@ -6,6 +6,7 @@ import 'package:fore_astro_2/core/data/model/ClientModel.dart';
 import 'package:fore_astro_2/core/data/model/PaymentHistoryModel.dart';
 import 'package:fore_astro_2/core/data/repository/profileRepo.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class UserProfileScreen extends StatefulWidget {
   final PaymentHistoryModel log;
@@ -83,7 +84,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   const SizedBox(height: 15),
                   Text(
                     clientProfileModel!.name.toString(),
-                    style: const TextStyle(
+                    style: GoogleFonts.inter(
                       color: Color(0xFF201F1F),
                       fontSize: 22,
                       fontWeight: FontWeight.w500,
@@ -92,7 +93,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   const SizedBox(height: 10),
                   Text(
                     clientProfileModel!.email.toString(),
-                    style: const TextStyle(
+                    style: GoogleFonts.inter(
                       color: Color(0xFF515151),
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
@@ -101,8 +102,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   const SizedBox(height: 10),
                   Text(
                     clientProfileModel!.phone.toString(),
-                    style: const TextStyle(
-                      color: Color(0xFF515151),
+                    style: GoogleFonts.inter(
+                      color: const Color(0xFF515151),
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
                     ),

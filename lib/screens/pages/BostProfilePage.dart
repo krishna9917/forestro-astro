@@ -7,6 +7,7 @@ import 'package:fore_astro_2/core/extensions/window.dart';
 import 'package:fore_astro_2/core/helper/helper.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
 import 'package:fore_astro_2/providers/UserProfileProvider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class BostProfile extends StatefulWidget {
@@ -83,7 +84,7 @@ class _BostProfileState extends State<BostProfile> {
                     ? "Profile Boost is Activated".toUpperCase()
                     : "Boost Your Profile",
                 style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                     GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               // const SizedBox(height: 10),
               // isBosted
@@ -101,7 +102,7 @@ class _BostProfileState extends State<BostProfile> {
                   ? const SizedBox()
                   : Text(
                       "₹ ${context.watch<UserProfileProvider>().userProfileModel?.boostCharges}.00/Hour",
-                      style: const TextStyle(
+                      style: GoogleFonts.inter(
                           fontWeight: FontWeight.bold, fontSize: 18),
                     ),
             ],

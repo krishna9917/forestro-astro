@@ -11,6 +11,7 @@ import 'package:fore_astro_2/providers/UserProfileProvider.dart';
 import 'package:fore_astro_2/providers/sockets/socketProvider.dart';
 import 'package:fore_astro_2/screens/Comunication/search/SearchRequest.dart';
 import 'package:fore_astro_2/screens/Comunication/viewAll/ViewAllRequestScreen.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../Components/recharge_popup.dart';
@@ -69,7 +70,7 @@ class HomeTabView extends StatelessWidget {
                   ),
                   child: Text(
                     "This Week ${context.watch<UserProfileProvider>().userProfileModel?.score?.split(" ").first ?? '0'}",
-                    style: TextStyle(
+                    style: GoogleFonts.inter(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: screenWidth * 0.03,
@@ -99,20 +100,20 @@ class HomeTabView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const Text(
+                         Text(
                           'No Chat Or Call Request Today',
-                          style: TextStyle(
+                          style: GoogleFonts.inter(
                             color: Color(0xFF201F1F),
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        const Padding(
+                         Padding(
                           padding: EdgeInsets.all(20),
                           child: Text(
                             'Our team will review your profile and notify you once it has been approved. Thank you for your patience.',
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: GoogleFonts.inter(
                               color: Color(0xFF515151),
                               fontSize: 12,
                               fontWeight: FontWeight.w400,

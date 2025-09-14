@@ -5,6 +5,7 @@ import 'package:fore_astro_2/core/data/model/UserProfileModel.dart';
 import 'package:fore_astro_2/core/extensions/Text.dart';
 import 'package:fore_astro_2/core/helper/Navigate.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:photo_view/photo_view.dart';
 
 class PreviewScreen extends StatelessWidget {
@@ -83,7 +84,7 @@ class PreviewScreen extends StatelessWidget {
                                   .getFileName()
                                   .getFileExtension(),
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
+                          style:  GoogleFonts.inter(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 20),

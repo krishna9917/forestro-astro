@@ -10,6 +10,7 @@ import 'package:fore_astro_2/core/extensions/Text.dart';
 import 'package:fore_astro_2/core/helper/Navigate.dart';
 import 'package:fore_astro_2/core/helper/helper.dart';
 import 'package:fore_astro_2/providers/UserProfileProvider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class UpdateImageScreen extends StatefulWidget {
@@ -124,7 +125,7 @@ class _UpdateImageScreenState extends State<UpdateImageScreen> {
                             child: Center(
                                 child: Text(
                               "${files.length - 1}+",
-                              style: TextStyle(
+                              style: GoogleFonts.inter(
                                   fontWeight: FontWeight.bold, fontSize: 14),
                             )),
                           ),
@@ -146,12 +147,12 @@ class _UpdateImageScreenState extends State<UpdateImageScreen> {
               }),
             ),
           ),
-          const Padding(
+           Padding(
             padding: EdgeInsets.all(30.0),
             child: Text(
               'Supported file formats: png, jpg, jpeg maximum file size upto 5 mb',
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: GoogleFonts.inter(
                 color: Color(0xFF515151),
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
@@ -174,9 +175,9 @@ class _UpdateImageScreenState extends State<UpdateImageScreen> {
                     : () {
                         navigateme.pop();
                       },
-                child: const Text(
+                child:  Text(
                   "Cancel",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: GoogleFonts.inter(fontWeight: FontWeight.bold),
                 )),
             const SizedBox(width: 20),
             SizedBox(

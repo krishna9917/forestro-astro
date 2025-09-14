@@ -12,6 +12,7 @@ import 'package:fore_astro_2/core/helper/Navigate.dart';
 import 'package:fore_astro_2/core/helper/helper.dart';
 import 'package:fore_astro_2/providers/bankAccoutProvider.dart';
 import 'package:fore_astro_2/screens/main/ProfileUpdate/AddNackAccountScreen.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class MyBackList extends StatelessWidget {
@@ -114,7 +115,7 @@ class MyBackList extends StatelessWidget {
                 children: [
                   Text(
                     '${bankModel.name.toString().firstCharacters(30)}  ${bankModel.accountNumber.toString().lastCharacters(4)}',
-                    style: const TextStyle(
+                    style:  GoogleFonts.inter(
                       color: Color(0xFF201F1F),
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
@@ -125,7 +126,7 @@ class MyBackList extends StatelessWidget {
                     bankModel.status == "1"
                         ? 'Primary Account'
                         : "Other Account",
-                    style: const TextStyle(
+                    style: GoogleFonts.inter(
                       color: Color(0xFF515151),
                       fontSize: 10,
                       fontWeight: FontWeight.w400,
@@ -193,7 +194,7 @@ class AddNewBank extends StatelessWidget {
               SizedBox(width: 25),
               Text(
                 'Add Bank Account',
-                style: TextStyle(
+                style: GoogleFonts.inter(
                   color: Color(0xFFFF6600),
                   fontSize: 17,
                   fontWeight: FontWeight.w500,

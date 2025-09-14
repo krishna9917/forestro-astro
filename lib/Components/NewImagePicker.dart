@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fore_astro_2/constants/Assets.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class NewImagePicker extends StatefulWidget {
   final Function(List<File>?)? onSelect;
@@ -110,7 +111,7 @@ class _NewImagePickerState extends State<NewImagePicker> {
                       child: Center(
                           child: Text(
                         "${file.length - 1}+",
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: GoogleFonts.inter(fontWeight: FontWeight.bold),
                       ))),
                 ),
               )

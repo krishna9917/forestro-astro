@@ -3,6 +3,7 @@ import 'package:fore_astro_2/core/data/model/UserProfileModel.dart';
 import 'package:fore_astro_2/core/extensions/Text.dart';
 import 'package:fore_astro_2/core/extensions/window.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class UserInfoBox extends StatelessWidget {
   final String title;
@@ -41,7 +42,7 @@ class UserInfoBox extends StatelessWidget {
               showTitle
                   ? Text(
                       '$title',
-                      style: const TextStyle(
+                      style: GoogleFonts.inter(
                         color: Colors.black,
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -105,7 +106,7 @@ class UserInfoBoxContent extends StatelessWidget {
         children: [
           Text(
             '$title',
-            style: const TextStyle(
+            style: GoogleFonts.inter(
               color: Color(0xFF908686),
               fontSize: 12,
               fontWeight: FontWeight.w500,
@@ -114,7 +115,7 @@ class UserInfoBoxContent extends StatelessWidget {
           Text(
             '$content',
             style: textStyle ??
-                TextStyle(
+                GoogleFonts.inter(
                   color: Color(0xFF201F1F),
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
@@ -157,7 +158,7 @@ class UserCertificationBox extends StatelessWidget {
             children: [
               Text(
                 '${certifications.certificate.toString().getFileName().firstCharacters(20) + certifications.certificate.toString().getFileExtension()}',
-                style: const TextStyle(
+                style: GoogleFonts.inter(
                   color: Color(0xFF201F1F),
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -165,7 +166,7 @@ class UserCertificationBox extends StatelessWidget {
               ),
               Text(
                 '${certifications.fileSize != null ? (int.parse(certifications.fileSize.toString()) / 1024).round().toString() + " Kb" : certifications.certificate.toString().getFileExtension() + " File"}',
-                style: const TextStyle(
+                style: GoogleFonts.inter(
                   color: Color(0xFF908686),
                   fontSize: 10,
                   fontWeight: FontWeight.w500,

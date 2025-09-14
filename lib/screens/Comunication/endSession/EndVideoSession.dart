@@ -10,6 +10,7 @@ import 'package:fore_astro_2/providers/UserProfileProvider.dart';
 import 'package:fore_astro_2/providers/sessionProvider.dart';
 import 'package:fore_astro_2/screens/Comunication/sendremedy/SendRemedyScreen.dart';
 import 'package:fore_astro_2/screens/main/HomeTabScreen.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class EndVideoSession extends StatefulWidget {
@@ -78,7 +79,7 @@ class _EndVideoSessionState extends State<EndVideoSession> {
               Text(
                 "${context.read<SessionProvider>().sec ~/ 60} Min ${context.read<SessionProvider>().sec % 60} Sec",
                 style:
-                    const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                     GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10),
               Text(

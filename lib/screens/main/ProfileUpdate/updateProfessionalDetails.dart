@@ -9,6 +9,7 @@ import 'package:fore_astro_2/core/helper/Navigate.dart';
 import 'package:fore_astro_2/core/helper/helper.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
 import 'package:fore_astro_2/providers/UserProfileProvider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class UpdateProfessionalDetails extends StatefulWidget {
@@ -281,9 +282,9 @@ class _UpdateProfessionalDetailsState extends State<UpdateProfessionalDetails> {
                         FocusScope.of(context).requestFocus(new FocusNode());
                         navigateme.pop();
                       },
-                child: const Text(
+                child:  Text(
                   "Cancel",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: GoogleFonts.inter(fontWeight: FontWeight.bold),
                 )),
             const SizedBox(width: 20),
             SizedBox(

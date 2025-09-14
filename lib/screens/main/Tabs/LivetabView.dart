@@ -10,6 +10,7 @@ import 'package:fore_astro_2/core/theme/Colors.dart';
 import 'package:fore_astro_2/providers/UserProfileProvider.dart';
 import 'package:fore_astro_2/providers/liveDataProvider.dart';
 import 'package:fore_astro_2/screens/Comunication/live/LiveScreen.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -64,18 +65,18 @@ class _LiveTabViewState extends State<LiveTabView> {
                     // ignore: prefer_interpolation_to_compose_strings
                     title: Text(
                       state.historyData[index].time + " Min",
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                      style:  GoogleFonts.inter(fontWeight: FontWeight.bold),
                     ),
                     subtitle: Text(
                       state.historyData[index].dateTime
                           .toIso8601String()
                           .formatDate(),
-                      style: const TextStyle(fontSize: 10),
+                      style:  GoogleFonts.inter(fontSize: 10),
                     ),
                     trailing: Text(
                       " - ₹" + state.historyData[index].totalAmount,
                       style:
-                          const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                           GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 14),
                     ),
                   ),
                 ),
@@ -109,9 +110,9 @@ class _LiveTabViewState extends State<LiveTabView> {
             ),
           );
         },
-        label: const Text(
+        label:  Text(
           " Go Live ",
-          style: TextStyle(
+          style: GoogleFonts.inter(
             fontWeight: FontWeight.bold,
             color: Colors.white,
             fontSize: 16,

@@ -8,6 +8,7 @@ import 'package:fore_astro_2/core/extensions/validate.dart';
 import 'package:fore_astro_2/core/helper/Navigate.dart';
 import 'package:fore_astro_2/core/helper/helper.dart';
 import 'package:fore_astro_2/providers/UserProfileProvider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class ProfileUpdateScreen extends StatefulWidget {
@@ -147,7 +148,7 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                 onPressed: loading ? null : () {},
                 child: Text(
                   "Cancel",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: GoogleFonts.inter(fontWeight: FontWeight.bold),
                 )),
             SizedBox(width: 20),
             SizedBox(

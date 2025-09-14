@@ -6,6 +6,7 @@ import 'package:fore_astro_2/constants/Assets.dart';
 import 'package:fore_astro_2/core/extensions/Text.dart';
 import 'package:fore_astro_2/core/helper/Navigate.dart';
 import 'package:fore_astro_2/screens/Comunication/Chat/PreviewChatScreen.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AccptedRequest extends StatelessWidget {
   RequestType requestType;
@@ -57,7 +58,7 @@ class AccptedRequest extends StatelessWidget {
                         '$name',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
+                        style: GoogleFonts.inter(
                           color: Color(0xFF313131),
                           fontSize: 17,
                           fontWeight: FontWeight.w500,
@@ -71,7 +72,7 @@ class AccptedRequest extends StatelessWidget {
                       children: [
                         Text(
                           '$dateTime',
-                          style: TextStyle(
+                          style: GoogleFonts.inter(
                             color: Color(0xFF908686),
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
@@ -88,7 +89,7 @@ class AccptedRequest extends StatelessWidget {
             Text(
               '$status'.capitalize(),
               textAlign: TextAlign.right,
-              style: TextStyle(
+              style: GoogleFonts.inter(
                 color: Color(0xFF515151),
                 fontSize: 15,
                 fontWeight: FontWeight.w600,

@@ -6,6 +6,7 @@ import 'package:fore_astro_2/core/data/model/LogModel.dart';
 import 'package:fore_astro_2/core/extensions/Text.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
 import 'package:fore_astro_2/providers/sockets/socketProvider.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ChatListCard extends StatelessWidget {
   final LogModel log;
@@ -55,7 +56,7 @@ class ChatListCard extends StatelessWidget {
                     children: [
                       Text(
                         "${log.name?[0].toUpperCase()}${log.name?.substring(1)}",
-                        style: const TextStyle(
+                        style:GoogleFonts.inter(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
@@ -66,12 +67,12 @@ class ChatListCard extends StatelessWidget {
                         children: [
                           Text(
                             "${log.communicitionTime} mins",
-                            style: const TextStyle(fontSize: 12),
+                            style: GoogleFonts.inter(fontSize: 12),
                           ),
                           const SizedBox(width: 8),
                           Text(
                             "Amount ₹ ${log.totalAmount}",
-                            style: const TextStyle(fontSize: 12),
+                            style: GoogleFonts.inter(fontSize: 12),
                           ),
                         ],
                       ),
@@ -85,7 +86,7 @@ class ChatListCard extends StatelessWidget {
                                   TextSpan(
                                     text:
                                         ' ${log.communicationId}'.toUpperCase(),
-                                    style: TextStyle(
+                                    style: GoogleFonts.inter(
                                         color: AppColor.primary, fontSize: 13),
                                   ),
                                 ]),
@@ -95,7 +96,7 @@ class ChatListCard extends StatelessWidget {
                             TextSpan(text: 'ID:', children: <InlineSpan>[
                               TextSpan(
                                 text: '${log.id}'.toUpperCase(),
-                                style: TextStyle(color: AppColor.primary),
+                                style: GoogleFonts.inter(color: AppColor.primary),
                               ),
                             ]),
                           ),

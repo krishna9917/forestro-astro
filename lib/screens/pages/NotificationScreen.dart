@@ -5,6 +5,7 @@ import 'package:fore_astro_2/core/pushNotification/AwesomeNotificationConfig.dar
 import 'package:fore_astro_2/core/theme/Colors.dart';
 import 'package:fore_astro_2/core/utils/NotificartionManager.dart';
 import 'package:fore_astro_2/providers/NotificationProvider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class NotificationScreen extends StatefulWidget {
@@ -51,7 +52,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     model.type.toString()),
                 title: Text(
                   "${model.title}",
-                  style: const TextStyle(
+                  style:  GoogleFonts.inter(
                     fontWeight: FontWeight.bold,
                   ),
                 ),

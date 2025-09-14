@@ -14,6 +14,7 @@ import 'package:fore_astro_2/core/helper/helper.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
 import 'package:fore_astro_2/providers/UserProfileProvider.dart';
 import 'package:fore_astro_2/screens/main/ProfileUpdate/Preview/PreviewDocsScreen.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:zego_zimkit/zego_zimkit.dart';
 
@@ -89,9 +90,9 @@ class _UpdateCertificationScreenState extends State<UpdateCertificationScreen> {
         padding: const EdgeInsets.all(15.0),
         child: Column(
           children: [
-            const Text(
+             Text(
               'Supported file formats: pdf, png, jpg, jpeg maximum file size up to 25 MB',
-              style: TextStyle(
+              style: GoogleFonts.inter(
                 color: Color(0xFF515151),
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
@@ -194,7 +195,7 @@ class FileViewBox extends StatelessWidget {
                       "$title",
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
+                      style:  GoogleFonts.inter(
                         color: Color(0xFF515151),
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -203,7 +204,7 @@ class FileViewBox extends StatelessWidget {
                   ),
                   Text(
                     " $desc",
-                    style: const TextStyle(
+                    style: GoogleFonts.inter(
                       color: Color(0xFF908686),
                       fontSize: 13,
                       fontWeight: FontWeight.w500,

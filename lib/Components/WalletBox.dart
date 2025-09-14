@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/UserProfileProvider.dart';
@@ -28,7 +29,7 @@ class WalletBox extends StatelessWidget {
           SizedBox(width: 10),
           Text(
             "₹ ${context.watch<UserProfileProvider>().userProfileModel?.wallet}",
-            style: TextStyle(
+            style: GoogleFonts.inter(
               fontWeight: FontWeight.bold,
             ),
           ),

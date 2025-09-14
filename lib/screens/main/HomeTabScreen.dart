@@ -25,6 +25,7 @@ import 'package:fore_astro_2/screens/main/Tabs/LivetabView.dart';
 import 'package:fore_astro_2/screens/main/Tabs/ProfileTabView.dart';
 import 'package:fore_astro_2/screens/pages/BostProfilePage.dart';
 import 'package:fore_astro_2/screens/pages/NotificationScreen.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -156,7 +157,7 @@ class _HomeTabScreenState extends State<HomeTabScreen>
               children: [
                 Text(
                   'Hi $userName,',
-                  style: const TextStyle(
+                  style: GoogleFonts.inter(
                     color: Color(0xFF201F1F),
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -164,7 +165,7 @@ class _HomeTabScreenState extends State<HomeTabScreen>
                 ),
                 Text(
                   userStatus,
-                  style: const TextStyle(
+                  style: GoogleFonts.inter(
                     color: Color(0xFF353433),
                     fontSize: 12,
                     fontWeight: FontWeight.w600,

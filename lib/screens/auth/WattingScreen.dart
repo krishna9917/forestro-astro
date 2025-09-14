@@ -7,6 +7,7 @@ import 'package:fore_astro_2/core/helper/Navigate.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
 import 'package:fore_astro_2/providers/sockets/socketProvider.dart';
 import 'package:fore_astro_2/screens/auth/LoginScreen.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -57,9 +58,9 @@ class _WettingScreenState extends State<WettingScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(height: 120),
-                    const Text(
+                     Text(
                       'Profile Status',
-                      style: TextStyle(
+                      style: GoogleFonts.inter(
                         color: Color(0xFF201F1F),
                         fontSize: 22,
                         fontWeight: FontWeight.w700,
@@ -74,7 +75,7 @@ class _WettingScreenState extends State<WettingScreen> {
                         widget.status == "pending"?
                         'Your profile has not yet been approved':"Your profile has been rejected",
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
+                        style:  GoogleFonts.inter(
                           color: Color(0xFF201F1F),
                           fontSize: 18,
                           fontWeight: FontWeight.w500,
@@ -84,10 +85,10 @@ class _WettingScreenState extends State<WettingScreen> {
                     const SizedBox(height: 30),
                     SizedBox(
                       width: context.windowWidth / 1.3,
-                      child: const Text(
+                      child:  Text(
                         'Our team will review your profile and notify you once it has been approved. Thank you for your patience.',
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: GoogleFonts.inter(
                           color: Color(0xFF515151),
                           fontSize: 12,
                           fontWeight: FontWeight.w500,

@@ -8,6 +8,7 @@ import 'package:fore_astro_2/core/theme/Colors.dart';
 import 'package:fore_astro_2/providers/UserProfileProvider.dart';
 import 'package:fore_astro_2/screens/auth/WattingScreen.dart';
 import 'package:fore_astro_2/screens/main/HomeTabScreen.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class AstroExamScreen extends StatefulWidget {
@@ -111,20 +112,20 @@ class _AstroExamScreenState extends State<AstroExamScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text(
+                     Text(
                       'No Questions Found',
-                      style: TextStyle(
+                      style: GoogleFonts.inter(
                         color: Color(0xFF201F1F),
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const Padding(
+                     Padding(
                       padding: EdgeInsets.all(20),
                       child: Text(
                         'Our team will review your profile and notify you once it has been approved. Thank you for your patience.',
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: GoogleFonts.inter(
                           color: Color(0xFF515151),
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
@@ -223,7 +224,7 @@ class _AstroExamScreenState extends State<AstroExamScreen> {
                               ? "Finish"
                               : "Next")
                           .toUpperCase(),
-                      style: const TextStyle(
+                      style:  GoogleFonts.inter(
                           color: Colors.white, fontWeight: FontWeight.bold),
                     ),
               icon: submitLoading

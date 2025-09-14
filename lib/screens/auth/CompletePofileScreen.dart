@@ -17,6 +17,7 @@ import 'package:fore_astro_2/core/helper/Navigate.dart';
 import 'package:fore_astro_2/core/helper/helper.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
 import 'package:fore_astro_2/screens/auth/Exam/AstroExamScreen.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CompleteProfileScreen extends StatefulWidget {
@@ -200,10 +201,10 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                     ],
                   ),
                   const SizedBox(height: 15),
-                  const Center(
+                   Center(
                     child: Text(
                       'Complete your Profile',
-                      style: TextStyle(
+                      style: GoogleFonts.inter(
                         color: Color(0xFF201F1F),
                         fontSize: 22,
                         fontWeight: FontWeight.w700,
@@ -332,11 +333,11 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                               },
                             ),
                             const SizedBox(height: 22),
-                            const Padding(
+                             Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Text(
                                 'Address',
-                                style: TextStyle(
+                                style: GoogleFonts.inter(
                                   color: Colors.black,
                                   fontSize: 20,
                                   fontWeight: FontWeight.w600,
@@ -410,9 +411,9 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                                       ),
                                     );
                                   }
-                                  return const Text(
+                                  return  Text(
                                     "Submit",
-                                    style: TextStyle(fontSize: 20),
+                                    style: GoogleFonts.inter(fontSize: 20),
                                   );
                                 }),
                               ),

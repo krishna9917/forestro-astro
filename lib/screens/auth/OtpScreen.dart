@@ -9,6 +9,7 @@ import 'package:fore_astro_2/core/helper/helper.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
 import 'package:fore_astro_2/providers/UserProfileProvider.dart';
 import 'package:fore_astro_2/screens/auth/CompletePofileScreen.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:phone_input/phone_input_package.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -149,13 +150,13 @@ print("build version number =======>>>>>>>>>>>>$_version $_buildNumber");
                       ),
                       SizedBox(
                         width: context.windowWidth - 80,
-                        child: const ListTile(
+                        child:  ListTile(
                           title: Text(
                             "Verify Your OTP",
-                            style: TextStyle(
+                            style: GoogleFonts.inter(
                                 fontWeight: FontWeight.bold, fontSize: 20),
                           ),
-                          subtitle: Text("Enter the OTP sent on your mobile"),
+                          subtitle: const Text("Enter the OTP sent on your mobile"),
                         ),
                       ),
                     ],
@@ -220,9 +221,9 @@ print("build version number =======>>>>>>>>>>>>$_version $_buildNumber");
                               ),
                             );
                           }
-                          return const Text(
+                          return  Text(
                             "Verify Your OTP",
-                            style: TextStyle(
+                            style: GoogleFonts.inter(
                               color: Colors.white,
                             ),
                           );
@@ -236,7 +237,7 @@ print("build version number =======>>>>>>>>>>>>$_version $_buildNumber");
                     onPressed: resendLoading || disableResend ? null : onResend,
                     child: Text(
                       resendLoading ? "Resending Otp..." : "Resend OTP",
-                      style: TextStyle(
+                      style: GoogleFonts.inter(
                         fontWeight: FontWeight.bold,
                         color: resendLoading
                             ? AppColor.primary.withOpacity(0.7)

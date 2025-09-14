@@ -10,6 +10,7 @@ import 'package:fore_astro_2/providers/ComunicationProvider.dart';
 import 'package:fore_astro_2/providers/UserProfileProvider.dart';
 import 'package:fore_astro_2/providers/sockets/socketProvider.dart';
 import 'package:fore_astro_2/screens/Comunication/Chat/PreviewChatScreen.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 
@@ -142,7 +143,7 @@ class RecquestBox extends StatelessWidget {
                 textAlign: TextAlign.center,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
+                style: GoogleFonts.inter(
                   color: Color(0xFF201F1F),
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -155,7 +156,7 @@ class RecquestBox extends StatelessWidget {
                 children: [
                   Text(
                     'Date ${communicationModel.date.toString()}',
-                    style: const TextStyle(
+                    style: GoogleFonts.inter(
                       color: Color(0xFF515151),
                       fontSize: 10,
                       fontWeight: FontWeight.w500,
@@ -163,7 +164,7 @@ class RecquestBox extends StatelessWidget {
                   ),
                   Text(
                     'Time ${communicationModel.time}',
-                    style: const TextStyle(
+                    style: GoogleFonts.inter(
                       color: Color(0xFF515151),
                       fontSize: 10,
                       fontWeight: FontWeight.w500,
@@ -183,7 +184,7 @@ class RecquestBox extends StatelessWidget {
                     child: Center(
                         child: Text(
                             "In Waiting - ${(communicationModel.slot! + 1)}",
-                            style: const TextStyle(
+                            style: GoogleFonts.inter(
                               color: Colors.white,
                             ))),
                   );
@@ -211,7 +212,7 @@ class RecquestBox extends StatelessWidget {
                                   ? "Reply"
                                   : "Accept"
                               : "Reply",
-                          style: const TextStyle(
+                          style: GoogleFonts.inter(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                           ),
@@ -232,9 +233,9 @@ class RecquestBox extends StatelessWidget {
                             shape: WidgetStatePropertyAll(
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10)))),
-                        child: const Text(
+                        child:  Text(
                           "Decline",
-                          style: TextStyle(
+                          style: GoogleFonts.inter(
                             fontSize: 14,
                             color: Colors.black,
                             fontWeight: FontWeight.w500,

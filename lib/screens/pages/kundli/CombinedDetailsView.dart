@@ -16,6 +16,7 @@ import 'package:fore_astro_2/screens/pages/kundli/view/KpInfo.dart';
 import 'package:fore_astro_2/screens/pages/kundli/view/PlanetInfo.dart';
 import 'package:fore_astro_2/screens/pages/kundli/view/dasha.dart';
 import 'package:fore_astro_2/screens/pages/kundli/view/dashacharts.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ViewKnuldliData extends StatelessWidget {
   final PlanetModel planetModel;
@@ -75,8 +76,8 @@ class ViewKnuldliData extends StatelessWidget {
                   backgroundColor: AppColor.primary,
                   unselectedBackgroundColor: Colors.white,
                   unselectedLabelStyle:
-                      const TextStyle(color: Color.fromARGB(255, 35, 35, 35)),
-                  labelStyle: const TextStyle(color: Colors.white),
+                       GoogleFonts.inter(color: Color.fromARGB(255, 35, 35, 35)),
+                  labelStyle: GoogleFonts.inter(color: Colors.white),
                   buttonMargin:
                       const EdgeInsets.symmetric(horizontal: 14, vertical: 3),
                   tabs: const [

@@ -1,6 +1,7 @@
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CompleteProfileInputBox extends StatelessWidget {
   String title;
@@ -40,7 +41,7 @@ class CompleteProfileInputBox extends StatelessWidget {
           padding: const EdgeInsets.only(left: 10, bottom: 8),
           child: Text(
             title,
-            style: const TextStyle(
+            style: GoogleFonts.inter(
               color: Color(0xFF353333),
               fontSize: 14,
               fontWeight: FontWeight.w600,
@@ -99,7 +100,7 @@ class CompleteProfileSelectBox extends StatelessWidget {
           padding: const EdgeInsets.only(left: 10, bottom: 8),
           child: Text(
             title,
-            style: const TextStyle(
+            style:GoogleFonts.inter(
               color: Color(0xFF353333),
               fontSize: 14,
               fontWeight: FontWeight.w600,
@@ -158,7 +159,7 @@ class MultiSelectBox extends StatelessWidget {
           padding: const EdgeInsets.only(left: 10, bottom: 8),
           child: Text(
             title,
-            style: const TextStyle(
+            style: GoogleFonts.inter(
               color: Color(0xFF353333),
               fontSize: 14,
               fontWeight: FontWeight.w600,
@@ -223,7 +224,7 @@ class SearchSelectBox extends StatelessWidget {
           padding: const EdgeInsets.only(left: 10, bottom: 8),
           child: Text(
             title,
-            style: const TextStyle(
+            style: GoogleFonts.inter(
               color: Color(0xFF353333),
               fontSize: 14,
               fontWeight: FontWeight.w600,

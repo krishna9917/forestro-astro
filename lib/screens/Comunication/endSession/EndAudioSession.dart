@@ -9,6 +9,7 @@ import 'package:fore_astro_2/core/helper/Navigate.dart';
 import 'package:fore_astro_2/providers/UserProfileProvider.dart';
 import 'package:fore_astro_2/providers/sessionProvider.dart';
 import 'package:fore_astro_2/screens/main/HomeTabScreen.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class EndAudioSession extends StatefulWidget {
@@ -84,7 +85,7 @@ class _EndAudioSessionState extends State<EndAudioSession> {
               Text(
                 "${context.read<SessionProvider>().sec ~/ 60} Min ${context.read<SessionProvider>().sec % 60} Sec",
                 style:
-                    const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                     GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
               Text(

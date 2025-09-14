@@ -9,6 +9,7 @@ import 'package:fore_astro_2/core/theme/Colors.dart';
 import 'package:fore_astro_2/providers/ComunicationProvider.dart';
 import 'package:fore_astro_2/screens/Comunication/Chat/PreviewChatScreen.dart';
 import 'package:fore_astro_2/screens/pages/kundli/KundliForm.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 enum ViewType { Chats, Calls }
@@ -114,11 +115,11 @@ class RequestAllViewList extends StatelessWidget {
     return ListTile(
       title: Text(
         communicationModel.name.toString(),
-        style: TextStyle(fontWeight: FontWeight.bold),
+        style: GoogleFonts.inter(fontWeight: FontWeight.bold),
       ),
       subtitle: Text(
         '${communicationModel.date} - ${communicationModel.time}',
-        style: TextStyle(fontSize: 12),
+        style: GoogleFonts.inter(fontSize: 12),
       ),
       leading: Stack(
         children: [

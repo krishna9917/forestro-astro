@@ -5,6 +5,7 @@ import 'package:fore_astro_2/core/data/repository/dataLogsRepo.dart';
 import 'package:fore_astro_2/core/extensions/Text.dart';
 import 'package:fore_astro_2/core/extensions/window.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 Color getStatusColor(String type) {
   switch (type.toLowerCase()) {
@@ -122,7 +123,7 @@ class PayoutBox extends StatelessWidget {
             children: [
               Text(
                 '${payoutsModel.startWeekDay} - ${payoutsModel.endWeekDay}',
-                style: TextStyle(
+                style: GoogleFonts.inter(
                   color: Color(0xFF313131),
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -139,7 +140,7 @@ class PayoutBox extends StatelessWidget {
                 children: [
                   Text(
                     'Status:',
-                    style: TextStyle(
+                    style: GoogleFonts.inter(
                       color: Color(0xFF908686),
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
@@ -158,7 +159,7 @@ class PayoutBox extends StatelessWidget {
                     child: Center(
                       child: Text(
                         payoutsModel.paymentStatus.toString().capitalize(),
-                        style: TextStyle(
+                        style: GoogleFonts.inter(
                           color: Colors.white,
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
@@ -171,7 +172,7 @@ class PayoutBox extends StatelessWidget {
               Text(
                 '₹ ${payoutsModel.amount}',
                 textAlign: TextAlign.right,
-                style: TextStyle(
+                style: GoogleFonts.inter(
                   color: Color(0xFF201F1F),
                   fontSize: 18,
                   fontWeight: FontWeight.w800,

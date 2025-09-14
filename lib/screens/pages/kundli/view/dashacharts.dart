@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fore_astro_2/core/data/repository/VedicAstroAPIRepo.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class DashaChartPage extends StatefulWidget {
   final String dob;
@@ -100,8 +101,8 @@ class _DashaChartPageState extends State<DashaChartPage>
             return ListView(
               padding: const EdgeInsets.all(16.0),
               children: [
-                const Text("North",
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                 Text("North",
+                    style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
                 SizedBox(
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -122,8 +123,8 @@ class _DashaChartPageState extends State<DashaChartPage>
                   ),
                 ),
                 const SizedBox(height: 16),
-                const Text("South",
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                 Text("South",
+                    style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
                 SizedBox(
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 20),

@@ -8,6 +8,7 @@ import 'package:fore_astro_2/core/data/repository/communicationRepo.dart';
 import 'package:fore_astro_2/core/extensions/window.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
 import 'package:fore_astro_2/providers/UserProfileProvider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class FeedTabView extends StatefulWidget {
@@ -175,7 +176,7 @@ class StatusBox extends StatelessWidget {
               const SizedBox(width: 15),
               Text(
                 '$title',
-                style: const TextStyle(
+                style:  GoogleFonts.inter(
                   color: Color(0xFF201F1F),
                   fontSize: 18,
                   fontWeight: FontWeight.w500,
@@ -185,10 +186,9 @@ class StatusBox extends StatelessWidget {
           ),
           Text(
             '$value',
-            style: const TextStyle(
+            style: GoogleFonts.inter(
               color: Color(0xFF141414),
               fontSize: 20,
-              fontFamily: 'Inter',
               fontWeight: FontWeight.w500,
               height: 0,
             ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fore_astro_2/core/extensions/Text.dart';
 import 'package:fore_astro_2/providers/UserProfileProvider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class LiveToggleButton extends StatelessWidget {
@@ -46,7 +47,7 @@ class LiveToggleButton extends StatelessWidget {
                 SizedBox(width: 8),
                 Text(
                   '${state.userProfileModel?.isOnline.toString().capitalize()}',
-                  style: TextStyle(
+                  style: GoogleFonts.inter(
                     color: Color(0xFFFF6500),
                     fontSize: 12,
                     fontWeight: FontWeight.w600,

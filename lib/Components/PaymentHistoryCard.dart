@@ -8,6 +8,7 @@ import 'package:fore_astro_2/core/extensions/window.dart';
 import 'package:fore_astro_2/core/helper/Navigate.dart';
 import 'package:fore_astro_2/providers/sockets/socketProvider.dart';
 import 'package:fore_astro_2/screens/pages/user/UserProfileScreen.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class PaymentListCard extends StatelessWidget {
   final PaymentHistoryModel log;
@@ -74,7 +75,7 @@ class PaymentListCard extends StatelessWidget {
                               children: [
                                 Text(
                                   log.name.toString().capitalize(),
-                                  style: const TextStyle(
+                                  style:  GoogleFonts.inter(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -82,7 +83,7 @@ class PaymentListCard extends StatelessWidget {
                                 Text(
                                   "₹ ${log.totalAmount}",
                                   textAlign: TextAlign.right,
-                                  style: const TextStyle(
+                                  style: GoogleFonts.inter(
                                     color: Color(0xFF201F1F),
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
@@ -98,12 +99,12 @@ class PaymentListCard extends StatelessWidget {
                             children: [
                               Text(
                                 log.time.toString(),
-                                style: const TextStyle(fontSize: 12),
+                                style: GoogleFonts.inter(fontSize: 12),
                               ),
                               const SizedBox(width: 8),
                               Text(
                                 log.date.toString(),
-                                style: const TextStyle(fontSize: 12),
+                                style: GoogleFonts.inter(fontSize: 12),
                               ),
                             ],
                           ),

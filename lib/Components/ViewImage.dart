@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 
 Widget viewImage(
@@ -41,7 +42,7 @@ Widget viewImage(
               child: Text(
                 (name ?? "U").split("")[0].toUpperCase(),
                 style: textStyle ??
-                    const TextStyle(
+                     GoogleFonts.inter(
                       fontSize: 25,
                       color: Color.fromARGB(255, 111, 100, 100),
                       fontWeight: FontWeight.bold,

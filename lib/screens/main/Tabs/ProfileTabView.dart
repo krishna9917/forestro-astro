@@ -14,6 +14,7 @@ import 'package:fore_astro_2/screens/main/ProfileUpdate/ViewBackAccountsScreen.d
 import 'package:fore_astro_2/screens/main/ProfileUpdate/personalDetailsUpdateScreen.dart';
 import 'package:fore_astro_2/screens/main/ProfileUpdate/profileUpdateScreen.dart';
 import 'package:fore_astro_2/screens/main/ProfileUpdate/updateProfessionalDetails.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class ProfiletabView extends StatelessWidget {
@@ -59,7 +60,7 @@ class ProfiletabView extends StatelessWidget {
                     ),
                     Text(
                       state.userProfileModel?.name ?? "User Name",
-                      style: const TextStyle(
+                      style: GoogleFonts.inter(
                         color: Color(0xFF201F1F),
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
@@ -84,7 +85,7 @@ class ProfiletabView extends StatelessWidget {
                   child: Text(
                     state.userProfileModel?.description ?? "Update Your Bio",
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
+                    style: GoogleFonts.inter(
                       color: Color(0xFF515151),
                       fontSize: 12,
                       fontWeight: FontWeight.w400,

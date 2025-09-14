@@ -5,6 +5,7 @@ import 'package:fore_astro_2/core/data/model/ReviewModel.dart';
 import 'package:fore_astro_2/core/extensions/Text.dart';
 import 'package:fore_astro_2/core/extensions/window.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 Widget ViewRating({double initialRating = 0.0}) {
   return RatingBar.builder(
@@ -69,7 +70,7 @@ class RatingReviewBox extends StatelessWidget {
                     children: [
                       Text(
                         reviewsModel.userName!,
-                        style: TextStyle(
+                        style: GoogleFonts.inter(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
@@ -85,7 +86,7 @@ class RatingReviewBox extends StatelessWidget {
               ),
               Text(
                 reviewsModel.postDate.toString().formatDate(),
-                style: TextStyle(fontSize: 12),
+                style: GoogleFonts.inter(fontSize: 12),
               )
             ],
           ),
@@ -99,7 +100,7 @@ class RatingReviewBox extends StatelessWidget {
                 reviewsModel.comment.toString(),
                 maxLines: 8,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: 13),
+                style: GoogleFonts.inter(fontSize: 13),
               ),
             );
           }),

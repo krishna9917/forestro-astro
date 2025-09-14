@@ -5,6 +5,7 @@ import 'package:fore_astro_2/core/data/model/kundali/dasha/pranadasha_model.dart
 import 'package:fore_astro_2/core/data/model/kundali/dasha/shookshamadasha_model.dart';
 import 'package:fore_astro_2/core/data/model/kundali/dasha/vimshotri_model.dart';
 import 'package:fore_astro_2/core/data/repository/VedicAstroAPIRepo.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class DashaScreen extends StatefulWidget {
   final Vimsotridasa_Model mahadshamodel;
@@ -142,7 +143,7 @@ class _DashaScreenState extends State<DashaScreen> {
                                 ? data['start'].substring(0, 16)
                                 : data['start'])
                             : 'N/A',
-                        style: const TextStyle(fontSize: 10),
+                        style: GoogleFonts.inter(fontSize: 10),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       )),
@@ -152,7 +153,7 @@ class _DashaScreenState extends State<DashaScreen> {
                                 ? data['end'].substring(0, 16)
                                 : data['end'])
                             : 'N/A',
-                        style: const TextStyle(fontSize: 10),
+                        style: GoogleFonts.inter(fontSize: 10),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       )),

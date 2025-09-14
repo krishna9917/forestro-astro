@@ -1,6 +1,7 @@
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:phone_input/phone_input_package.dart';
 
@@ -110,7 +111,7 @@ class InputBox extends StatelessWidget {
           padding: const EdgeInsets.only(left: 20, bottom: 7),
           child: Text(
             title,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: GoogleFonts.inter(fontWeight: FontWeight.bold),
           ),
         ),
         TextFormField(

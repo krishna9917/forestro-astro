@@ -12,6 +12,7 @@ import 'package:fore_astro_2/constants/Assets.dart';
 import 'package:fore_astro_2/core/extensions/window.dart';
 import 'package:fore_astro_2/core/helper/Navigate.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:fore_astro_2/providers/UserProfileProvider.dart';
 import 'package:fore_astro_2/providers/sockets/socketProvider.dart';
@@ -244,14 +245,14 @@ class ProfileCard extends StatelessWidget {
                         userProfile?.name ?? "User",
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: TextStyle(
+                        style: GoogleFonts.inter(
                           fontWeight: FontWeight.bold,
                           fontSize: screenWidth * 0.045, // Responsive font size
                         ),
                       ),
                       Text(
                         userProfile?.specialization ?? "",
-                        style: TextStyle(
+                        style: GoogleFonts.inter(
                           fontWeight: FontWeight.w400,
                           color: Colors.grey[600],
                           fontSize: screenWidth * 0.035,
@@ -322,7 +323,7 @@ class DrawerTiles extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: const TextStyle(fontSize: 18),
+        style:  GoogleFonts.inter(fontSize: 18),
       ),
       trailing: trailing,
     );

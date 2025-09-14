@@ -13,6 +13,7 @@ import 'package:fore_astro_2/providers/sessionProvider.dart';
 import 'package:fore_astro_2/providers/sockets/socketProvider.dart';
 import 'package:fore_astro_2/screens/Comunication/endSession/EndAudioSession.dart';
 import 'package:fore_astro_2/screens/pages/kundli/KundliForm.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
@@ -260,11 +261,10 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
                   const SizedBox(width: 8),
                   Text(
                     formatTime(_remainingSeconds),
-                    style: const TextStyle(
+                    style:  GoogleFonts.inter(
                       color: Colors.white,
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      fontFamily: 'RobotoMono',
                       decoration: TextDecoration.none,
                     ),
                   ),
