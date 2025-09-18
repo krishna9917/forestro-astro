@@ -35,26 +35,29 @@ class _SplashScreenState extends State<SplashScreen>
       vsync: this,
       duration: const Duration(seconds: 60),
     )..repeat();
+    get();
 // Here Our Task
+//     Timer(const Duration(seconds: 1), () async {
+//       // ZIMKit().init(
+//       //   notificationConfig: ZegoZIMKitNotificationConfig(
+//       //       androidNotificationConfig: ZegoZIMKitAndroidNotificationConfig(),
+//       //       iosNotificationConfig: ZegoZIMKitIOSNotificationConfig()),
+//       //   appID: ZegoKeys.appId,
+//       //   appSign: ZegoKeys.appSign,
+//       // )
+//       //     .then((e) async {
+//
+//     //   }).catchError((e) {
+//     //     print(
+//     //         "error----------------------------------------------------------------  ");
+//     //     print(e);
+//     //   });
+//     });
+  }
 
-    Timer(const Duration(seconds: 1), () async {
-      ZIMKit()
-          .init(
-        notificationConfig: ZegoZIMKitNotificationConfig(
-            androidNotificationConfig: ZegoZIMKitAndroidNotificationConfig(),
-            iosNotificationConfig: ZegoZIMKitIOSNotificationConfig()),
-        appID: ZegoKeys.appId,
-        appSign: ZegoKeys.appSign,
-      )
-          .then((e) async {
-        await requestPermissions();
-        await context.read<UserProfileProvider>().getUserDataSplash();
-      }).catchError((e) {
-        print(
-            "error----------------------------------------------------------------  ");
-        print(e);
-      });
-    });
+  get() async {
+    await requestPermissions();
+    await context.read<UserProfileProvider>().getUserDataSplash();
   }
 
   Future<void> _loadPackageInfo() async {

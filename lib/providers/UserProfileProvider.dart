@@ -55,7 +55,7 @@ class UserProfileProvider with ChangeNotifier {
             }  else if (_userProfileModel?.profileStatus == "rejected"){
               navigateme.popUntil((route) => route.isFirst);
               navigateme
-                  .pushReplacement(routeMe(WettingScreen(status:"rejected"), isauth: true));
+                  .pushReplacement(routeMe(WettingScreen(status:"rejected",remark: _userProfileModel?.remark), isauth: true));
             }
 
             else {

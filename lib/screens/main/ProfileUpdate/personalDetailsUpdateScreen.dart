@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fore_astro_2/Components/Inputs/CompleteProfileInputBox.dart';
 import 'package:fore_astro_2/constants/ListofData.dart';
 import 'package:fore_astro_2/core/data/model/UserProfileModel.dart';
@@ -25,12 +28,14 @@ class _PersonalDetailsUpdateScreenState
   TextEditingController _dobController = TextEditingController();
   TextEditingController _borthPlaceController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
-  TextEditingController _cityController = TextEditingController();
+  TextEditingController city=TextEditingController();
+  TextEditingController state=TextEditingController();
+  TextEditingController pin=TextEditingController();
   TextEditingController _adharIdController = TextEditingController();
   TextEditingController _panIdController = TextEditingController();
 
   late String gender;
-  late String state;
+
 
   bool loading = false;
 
@@ -42,8 +47,10 @@ class _PersonalDetailsUpdateScreenState
     _dobController.text = userProfileProvider?.dateOfBirth ?? "";
     _borthPlaceController.text = userProfileProvider?.birthPlace ?? "";
     _addressController.text = userProfileProvider?.address ?? "";
-    state = userProfileProvider?.state ?? "";
-    _cityController.text = userProfileProvider?.city ?? "";
+    state.text= userProfileProvider?.state ?? "";
+    city.text= userProfileProvider?.city ?? "";
+    pin.text= userProfileProvider?.pinCode ?? "";
+
     _adharIdController.text = userProfileProvider?.adharId ?? "";
     _panIdController.text = userProfileProvider?.panNumber ?? "";
     gender = userProfileProvider?.gender ?? "";
@@ -56,8 +63,12 @@ class _PersonalDetailsUpdateScreenState
         showToast("Select Your gender");
         return false;
       }
-      if (state.isEmpty) {
-        showToast("Select Your gender");
+      if (state.text.isEmpty || city.text.isEmpty || pin.text.isEmpty) {
+        showToast("Select Your State, City and Pin Code");
+        return false;
+      }
+      if(pin.text.length!=6){
+        showToast("Enter Valid Pin Code");
         return false;
       }
 
@@ -68,12 +79,13 @@ class _PersonalDetailsUpdateScreenState
       Response response = await ProfileRepo.updateAstroPersonalDetails(
         dob: _dobController.text,
         borthPlace: _borthPlaceController.text.capitalize(),
-        city: _cityController.text.capitalize(),
+        city: city.text,
         adharId: _adharIdController.text,
         panNumber: _panIdController.text,
         gender: gender,
         address: _addressController.text,
-        state: state,
+        state: state.text,
+        pinCode: pin.text,
       );
       if (response.data['status'] == true) {
         showToast(response.data['message'] ?? "Profile Update Successfully");
@@ -88,6 +100,68 @@ class _PersonalDetailsUpdateScreenState
         loading = false;
       });
       showToast("Profile Update Error. Please Try later");
+    }
+  }
+
+  Future<void> getStateCity() async {
+    try {
+      final dio = Dio();
+      final url = "https://api.postalpincode.in/pincode/${pin.text}";
+
+
+      final response = await dio.get(url);
+
+
+      if (response.statusCode == 200) {
+        final res = response.data is String
+            ? jsonDecode(response.data)
+            : response.data;
+
+        if (res is List && res.isNotEmpty) {
+          final postOffices = res[0]["PostOffice"] as List?;
+
+          if (postOffices != null && postOffices.isNotEmpty) {
+            final first = postOffices.first as Map<String, dynamic>;
+
+            final stateValue = first["State"] ?? "";
+            final blockValue = first["Block"] ?? "";
+
+
+
+            setState(() {
+              state.text = stateValue;
+              city.text = blockValue;
+
+            });
+          } else {
+            setState(() {
+              state.text = "";
+              city.text = "";
+
+            });
+
+            showToast("No post office details found for this pin code.");
+          }
+        } else {
+
+          showToast("Invalid response format from API.");
+        }
+      } else {
+        print("❌ Server error: ${response.statusCode}");
+        setState(() {
+          state.text = "";
+          city.text = "";
+
+        });
+        showToast("Server error: ${response.statusCode}");
+      }
+    } on DioException catch (e) {
+      print("❌ Dio error: ${e.message}");
+      showToast("This pin code is not valid. Please try a different pin code.");
+    } catch (e) {
+
+      print("❌ Unexpected error: $e");
+      showToast("An unexpected error occurred. Please try again later.");
     }
   }
 
@@ -183,22 +257,46 @@ class _PersonalDetailsUpdateScreenState
                 },
               ),
               const SizedBox(height: 15),
-              CompleteProfileSelectBox(
-                title: "State",
-                list: [state, ...states],
-                onChanged: (e) {
-                  setState(() {
-                    state = e!;
-                  });
+
+              CompleteProfileInputBox(
+                hintText: "Enter PinCode",
+                onChanged: ((value) {
+                  if (value.isNotEmpty && value.length > 5) {
+                    getStateCity();
+                  }
+                }),
+                inputFormatter: [
+                  LengthLimitingTextInputFormatter(6),
+                  FilteringTextInputFormatter.digitsOnly
+                ],
+                textEditingController: pin,
+                keyboardType: TextInputType.number,
+                title: "PinCode",
+                validator: (e) {
+                  if (e == null || e.isEmpty) {
+                    return "Please Enter Your Area Pin Code";
+                  }
+                  return null;
                 },
               ),
               const SizedBox(height: 15),
               CompleteProfileInputBox(
+                hintText: "State",
+                enable:  false,
+                textEditingController: state,
+                title: "State",
+
+              ),
+              const SizedBox(height: 15),
+              CompleteProfileInputBox(
+                hintText: "City",
+
+                enable: false,
+                textEditingController: city,
                 title: "City",
-                textEditingController: _cityController,
                 validator: (e) {
                   if (e == null || e.isEmpty) {
-                    return "Enter Your City";
+                    return "Please Enter Your City";
                   }
                   return null;
                 },

@@ -54,7 +54,9 @@ class ProfileRepo {
       required String panNumber,
       required String address,
       required String state,
-      required String gender}) async {
+      required String gender,
+      required String pinCode
+      }) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? id = prefs.getString("id");
@@ -70,6 +72,7 @@ class ProfileRepo {
             'pan_number': panNumber,
             'state': state,
             'address': address,
+            'pin_code': pinCode,
           }));
       return await apiRequest.send<T>();
     } catch (e) {

@@ -113,10 +113,10 @@ class _LiveScreenState extends State<LiveScreen> {
               }
             },
           ),
-          appID: ZegoKeys.appId,
-          appSign: ZegoKeys.appSign,
+          appID: 2101331696,
+          appSign: '77838d88881dda6ac10b83406f2fb2027e946802d016035e98b58e7af4823dba',
           userID: userProfileProvider!.astroId.toString(),
-          userName: userProfileProvider!.name.toString(),
+          userName: userProfileProvider!.name.toString().split(" ").first,
           liveID: widget.liveID,
           config: widget.isHost
               ? ZegoUIKitPrebuiltLiveStreamingConfig.host()

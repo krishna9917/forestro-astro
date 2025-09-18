@@ -7,6 +7,7 @@ import 'package:fore_astro_2/core/helper/Navigate.dart';
 import 'package:fore_astro_2/core/theme/AppTheme.dart';
 import 'package:fore_astro_2/screens/main/ProfileUpdate/Preview/PreviewDocsScreen.dart';
 import 'package:fore_astro_2/screens/pages/kundli/KundliForm.dart';
+import 'package:zego_zim/zego_zim.dart';
 import 'package:zego_zimkit/zego_zimkit.dart';
 
 class PreviewChatScreen extends StatelessWidget {

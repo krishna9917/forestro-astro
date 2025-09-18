@@ -1,5 +1,6 @@
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -16,6 +17,10 @@ class CompleteProfileInputBox extends StatelessWidget {
   Widget? suffixIcon;
   bool obscureText;
   bool autofocus;
+  bool? enable;
+  Function(String)? onChanged;
+  String? hintText;
+  List<TextInputFormatter>? inputFormatter;
   CompleteProfileInputBox(
       {super.key,
       this.keyboardType,
@@ -29,7 +34,7 @@ class CompleteProfileInputBox extends StatelessWidget {
       this.prefixIcon,
       this.autofocus = false,
       this.obscureText = false,
-      this.maxLength});
+      this.maxLength,this.enable,this.inputFormatter,this.onChanged,this.hintText});
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +54,9 @@ class CompleteProfileInputBox extends StatelessWidget {
           ),
         ),
         TextFormField(
+          onChanged: onChanged,
+          inputFormatters: inputFormatter,
+          enabled: enable??true,
           controller: textEditingController,
           keyboardType: keyboardType,
           validator: validator,
@@ -59,6 +67,7 @@ class CompleteProfileInputBox extends StatelessWidget {
           autofocus: autofocus,
           obscureText: obscureText,
           decoration: InputDecoration(
+            hintText: hintText,
             filled: true,
             prefixIcon: prefixIcon,
             suffixIcon: suffixIcon,

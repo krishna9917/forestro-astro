@@ -165,14 +165,14 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
       child: Stack(
         children: [
           ZegoUIKitPrebuiltCall(
-              appID: ZegoKeys.appCallId,
-              appSign: ZegoKeys.appCallSign,
+              appID: 844833851,
+              appSign: '136a48b12cd722234938f6d8613362686b991c1e50784524851803fb7fdab1ab',
               userID: widget.userid,
               userName: context
                   .read<UserProfileProvider>()
                   .userProfileModel!
                   .name
-                  .toString(),
+                  .toString().split(' ').first,
               events: ZegoUIKitPrebuiltCallEvents(
                 user: ZegoCallUserEvents(
                   onEnter: (p) {

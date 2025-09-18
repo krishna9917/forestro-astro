@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fore_astro_2/Components/Inputs/CertificationPicker.dart';
 import 'package:fore_astro_2/Components/Inputs/CompleteProfileInputBox.dart';
 import 'package:fore_astro_2/Components/NewImagePicker.dart';
@@ -32,7 +33,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
   List<File> profileImg = [];
   String? gender;
   String? specialization;
-  String? state;
+
   List<PlatformFile> certifications = [];
   List<String> langue = [];
 
@@ -42,8 +43,70 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
   final TextEditingController _aadheerController = TextEditingController();
   final TextEditingController _panController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _cityController = TextEditingController();
-  final TextEditingController _pincodeController = TextEditingController();
+  TextEditingController city=TextEditingController();
+  TextEditingController state=TextEditingController();
+  TextEditingController pin=TextEditingController();
+
+  Future<void> getStateCity() async {
+    try {
+      final dio = Dio();
+      final url = "https://api.postalpincode.in/pincode/${pin.text}";
+
+
+      final response = await dio.get(url);
+
+
+      if (response.statusCode == 200) {
+        final res = response.data is String
+            ? jsonDecode(response.data)
+            : response.data;
+
+        if (res is List && res.isNotEmpty) {
+          final postOffices = res[0]["PostOffice"] as List?;
+
+          if (postOffices != null && postOffices.isNotEmpty) {
+            final first = postOffices.first as Map<String, dynamic>;
+
+            final stateValue = first["State"] ?? "";
+            final blockValue = first["Block"] ?? "";
+
+
+
+            setState(() {
+              state.text = stateValue;
+              city.text = blockValue;
+
+            });
+          } else {
+            setState(() {
+              state.text = "";
+              city.text = "";
+
+            });
+
+            showToast("No post office details found for this pin code.");
+          }
+        } else {
+
+          showToast("Invalid response format from API.");
+        }
+      } else {
+        setState(() {
+          state.text = "";
+          city.text = "";
+
+        });
+        showToast("Server error: ${response.statusCode}");
+      }
+    } on DioException catch (e) {
+      print("❌ Dio error: ${e.message}");
+      showToast("This pin code is not valid. Please try a different pin code.");
+    } catch (e) {
+
+      print("❌ Unexpected error: $e");
+      showToast("An unexpected error occurred. Please try again later.");
+    }
+  }
 
   bool validateAll() {
     if (profileImg == null) {
@@ -61,16 +124,18 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
       return false;
     }
 
-    if (state == null) {
-      showToast("Select Your State");
+
+
+    if (state.text.isEmpty || city.text.isEmpty || pin.text.isEmpty) {
+      showToast("Complete Your Address Details");
+      return false;
+    }
+    if (pin.text.length<6) {
+      showToast("Invalid PinCode");
       return false;
     }
 
-    // This Is Optional
-    // if (certifications.isEmpty) {
-    //   showToast("Select Your Certifications Files");
-    //   return false;
-    // }
+
 
     if (langue.isEmpty) {
       showToast("Select Your Languages");
@@ -118,9 +183,9 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
           'specialization': specialization,
           'language': jsonEncode(langue),
           'address': _addressController.text,
-          'city': _cityController.text,
-          'state': state,
-          'pin_code': _pincodeController.text.toUpperCase(),
+          'city': city.text,
+          'state': state.text,
+          'pin_code': pin.text.toUpperCase(),
           'astro_id': id,
           'certifications': files,
           'profile_images': imageFiles,
@@ -356,27 +421,19 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                               },
                             ),
                             const SizedBox(height: 15),
-                            CompleteProfileSelectBox(
-                              title: "State",
-                              list: ['', ...states],
-                              onChanged: (e) {
-                                state = e;
-                              },
-                            ),
-                            const SizedBox(height: 15),
+
                             CompleteProfileInputBox(
-                              textEditingController: _cityController,
-                              title: "City",
-                              validator: (e) {
-                                if (e == null || e.isEmpty) {
-                                  return "Please Enter Your City";
+                              hintText: "Enter PinCode",
+                              onChanged: ((value) {
+                                if (value.isNotEmpty && value.length > 5) {
+                                  getStateCity();
                                 }
-                                return null;
-                              },
-                            ),
-                            const SizedBox(height: 15),
-                            CompleteProfileInputBox(
-                              textEditingController: _pincodeController,
+                              }),
+                              inputFormatter: [
+                                LengthLimitingTextInputFormatter(6),
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              textEditingController: pin,
                               keyboardType: TextInputType.number,
                               title: "PinCode",
                               validator: (e) {
@@ -386,6 +443,28 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                                 return null;
                               },
                             ),
+                            const SizedBox(height: 15),
+                            CompleteProfileInputBox(
+                              hintText: "State",
+                              enable:  false,
+                              textEditingController: state,
+                              title: "State",
+
+                            ),
+                            const SizedBox(height: 15),
+                            CompleteProfileInputBox(
+                              hintText: "City",
+                              enable: false,
+                              textEditingController: city,
+                              title: "City",
+                              validator: (e) {
+                                if (e == null || e.isEmpty) {
+                                  return "Please Enter Your City";
+                                }
+                                return null;
+                              },
+                            ),
+
                             const SizedBox(height: 35),
                             SizedBox(
                               width: context.windowWidth,

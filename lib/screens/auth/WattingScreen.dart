@@ -14,7 +14,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class WettingScreen extends StatefulWidget {
   String? status;
-   WettingScreen({super.key, this.status});
+  String? remark;
+  WettingScreen({super.key, this.status, this.remark});
 
   @override
   State<WettingScreen> createState() => _WettingScreenState();
@@ -58,10 +59,10 @@ class _WettingScreenState extends State<WettingScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(height: 120),
-                     Text(
+                    Text(
                       'Profile Status',
                       style: GoogleFonts.inter(
-                        color: Color(0xFF201F1F),
+                        color: const Color(0xFF201F1F),
                         fontSize: 22,
                         fontWeight: FontWeight.w700,
                       ),
@@ -72,11 +73,13 @@ class _WettingScreenState extends State<WettingScreen> {
                     SizedBox(
                       width: context.windowWidth / 1.5,
                       child: Text(
-                        widget.status == "pending"?
-                        'Your profile has not yet been approved':"Your profile has been rejected",
+                        widget.status == "pending"
+                            ? 'Your profile has not yet been approved'
+                            : "Your profile has been ${widget.status}",
                         textAlign: TextAlign.center,
-                        style:  GoogleFonts.inter(
-                          color: Color(0xFF201F1F),
+                        style: GoogleFonts.inter(
+                          color: widget.status == "rejected"
+                              ? Colors.red:const Color(0xFF201F1F),
                           fontSize: 18,
                           fontWeight: FontWeight.w500,
                         ),
@@ -85,23 +88,26 @@ class _WettingScreenState extends State<WettingScreen> {
                     const SizedBox(height: 30),
                     SizedBox(
                       width: context.windowWidth / 1.3,
-                      child:  Text(
-                        'Our team will review your profile and notify you once it has been approved. Thank you for your patience.',
+                      child: Text(
+                        widget.status == "pending"
+                            ? 'Our team will review your profile and notify you once it has been approved. Thank you for your patience.'
+                            : (widget.remark ?? ""),
                         textAlign: TextAlign.center,
                         style: GoogleFonts.inter(
-                          color: Color(0xFF515151),
+                          color: widget.status == "rejected"
+                              ?Colors.red :const Color(0xFF515151),
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     TextButton(
                         onPressed: () async {
                           await context.read<SocketProvider>().logoutUse();
                         },
-                        child: Text("Logout ")),
-                    SizedBox(height: 20),
+                        child: const Text("Logout ")),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),

@@ -14,6 +14,7 @@ class UserProfileModel {
   String? city;
   String? pinCode;
   String? profileImg;
+  String? remark;
   bool? isProfileCreated;
   String? status;
   String? trusted;
@@ -43,6 +44,7 @@ class UserProfileModel {
       this.email,
       this.phone,
       this.gender,
+      this.remark,
       this.adharId,
       this.panNumber,
       this.specialization,
@@ -110,6 +112,7 @@ class UserProfileModel {
     astrologerLiveChargesPerMin = json['astrologer_live_charges_per_min'];
     boostCharges = json['boost_charges'];
     profileStatus = json['profile_status'];
+    remark = json['remark'];
     education = json['education'];
     description = json['description'];
     startTimeSlot = json['start_time_slot'];
@@ -127,6 +130,7 @@ class UserProfileModel {
     data['name'] = this.name;
     data['email'] = this.email;
     data['phone'] = this.phone;
+    data['remark'] = this.remark;
     data['gender'] = this.gender;
     data['adhar_id'] = this.adharId;
     data['pan_number'] = this.panNumber;

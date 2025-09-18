@@ -119,17 +119,13 @@ class PayoutBox extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Row(
-            children: [
-              Text(
-                '${payoutsModel.startWeekDay} - ${payoutsModel.endWeekDay}',
-                style: GoogleFonts.inter(
-                  color: Color(0xFF313131),
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
+          Text(
+            '${payoutsModel.startWeekDay} - ${payoutsModel.endWeekDay}',
+            style: GoogleFonts.inter(
+              color: Color(0xFF313131),
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
           ),
           Spacer(),
           Row(

@@ -9,11 +9,11 @@ import 'package:fore_astro_2/core/extensions/window.dart';
 import 'package:fore_astro_2/core/helper/Navigate.dart';
 import 'package:fore_astro_2/core/helper/helper.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
+import 'package:fore_astro_2/package/phoneinput/src/number_parser/models/phone_number.dart';
 import 'package:fore_astro_2/screens/auth/OtpScreen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:phone_input/phone_input_package.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

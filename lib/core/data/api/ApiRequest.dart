@@ -4,7 +4,8 @@ import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Logger logger = Logger();
-String apiUrl = "https://foreastro.com/api";
+String apiUrl = "https://foreastro.technovaedge.in/api";
+// String apiUrl = "https://foreastro.com/api";
 String apiKundliUrl = "https://api.vedicastroapi.com/v3-json";
 
 const String toastError = "Something Went Wrong!";

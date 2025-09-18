@@ -16,6 +16,7 @@ import 'package:fore_astro_2/screens/pages/kundli/KundliForm.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
+import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 
 class VideoCallScreen extends StatefulWidget {
   const VideoCallScreen({
@@ -130,15 +131,34 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       child: Stack(
         children: [
           ZegoUIKitPrebuiltCall(
-            appID: ZegoKeys.appCallId,
-            appSign: ZegoKeys.appCallSign,
+            appID: 844833851,
+            appSign: '136a48b12cd722234938f6d8613362686b991c1e50784524851803fb7fdab1ab',
             userID: widget.userid,
             userName: context
                 .read<UserProfileProvider>()
                 .userProfileModel!
                 .name
-                .toString(),
+                .toString().split(' ').first,
+            callID: widget.callID,
+            // userID: widget.userid,
+            // callID: widget.callID,
+            // userName: context
+            //     .read<UserProfileProvider>()
+            //     .userProfileModel!
+            //     .name
+            //     .toString(),
             events: ZegoUIKitPrebuiltCallEvents(
+              onError: (e){
+                print("astro error{$e}");
+              },
+              room: ZegoCallRoomEvents(
+                onTokenExpired: (e){
+                  print("astro error{$e}");
+                },
+                onStateChanged: (e){
+                  print("astro error{$e}");
+                }
+              ),
               user: ZegoCallUserEvents(
                 onEnter: (p) {
                   showToast(p.name.toString() + " join in call");
@@ -157,7 +177,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                 // navigateme.push(routeMe(const EndVideoSession()));
               },
             ),
-            callID: widget.callID,
             config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
               ..layout = ZegoLayout.pictureInPicture()
               ..beauty,
@@ -182,52 +201,52 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
               ],
             ),
           ),
-          // Positioned(
-          //   top: 10,
-          //   left: 10,
-          //   child: Container(
-          //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          //     decoration: BoxDecoration(
-          //       gradient: const LinearGradient(
-          //         colors: [
-          //           Color.fromARGB(255, 125, 122, 122),
-          //           Color.fromARGB(151, 234, 231, 227)
-          //         ],
-          //         begin: Alignment.topLeft,
-          //         end: Alignment.bottomRight,
-          //       ),
-          //       borderRadius: BorderRadius.circular(15),
-          //       boxShadow: [
-          //         BoxShadow(
-          //           color: Colors.black.withOpacity(0.2),
-          //           offset: const Offset(2, 4),
-          //           blurRadius: 6,
-          //         ),
-          //       ],
-          //     ),
-          //     child: Row(
-          //       mainAxisSize: MainAxisSize.min,
-          //       children: [
-          //         const Icon(
-          //           Icons.timer_outlined,
-          //           color: Colors.white,
-          //           size: 24,
-          //         ),
-          //         const SizedBox(width: 8),
-          //         Text(
-          //           formatTime(_remainingSeconds),
-          //           style: const TextStyle(
-          //             color: Colors.white,
-          //             fontSize: 24,
-          //             fontWeight: FontWeight.bold,
-          //             fontFamily: 'RobotoMono',
-          //             decoration: TextDecoration.none,
-          //           ),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
+          Positioned(
+            top: 10,
+            left: 10,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [
+                    Color.fromARGB(255, 125, 122, 122),
+                    Color.fromARGB(151, 234, 231, 227)
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    offset: const Offset(2, 4),
+                    blurRadius: 6,
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.timer_outlined,
+                    color: Colors.white,
+                    size: 24,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    formatTime(_remainingSeconds),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'RobotoMono',
+                      decoration: TextDecoration.none,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );

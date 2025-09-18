@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fore_astro_2/core/data/model/CommunicationModel.dart';
@@ -11,6 +10,7 @@ class CommunicationProvider with ChangeNotifier {
   List<CommunicationModel>? _todayLogs;
   int _currentSlots = 0;
   bool _reloading = false;
+
   List<CommunicationModel>? get chats => _chats;
   List<CommunicationModel>? get calls => _calls;
   List<CommunicationModel>? get todayLogs => _todayLogs;
@@ -30,17 +30,17 @@ class CommunicationProvider with ChangeNotifier {
         List<CommunicationModel> chats = [];
         List<CommunicationModel> calls = [];
         List data = response.data['data'];
-        print("_chats: $data");
         int count = 0;
-        data.forEach((element) {
-          print(element['type']);
+
+        for (var element in data) {
           if (element['type'].toString() == "chat") {
             chats.add(CommunicationModel.fromJson({...element, 'slot': count}));
           } else {
             calls.add(CommunicationModel.fromJson({...element, 'slot': count}));
           }
           count++;
-        });
+        }
+
         return {
           "chats": chats,
           "calls": calls,
@@ -62,8 +62,12 @@ class CommunicationProvider with ChangeNotifier {
       loadTodayLogs();
       _calls = response['calls'];
       _chats = response['chats'];
-      print("_chats: $_chats");
       _currentSlots = 0;
+
+      // हर item के लिए timer start करो
+      _chats?.forEach(startTimerForItem);
+      _calls?.forEach(startTimerForItem);
+
       notifyListeners();
     } catch (e) {
       _calls = [];
@@ -82,8 +86,12 @@ class CommunicationProvider with ChangeNotifier {
       loadTodayLogs();
       _calls = response['calls'];
       _chats = response['chats'];
-      print("_chats: $_chats");
       _currentSlots = 0;
+
+      // हर item के लिए timer start करो
+      _chats?.forEach(startTimerForItem);
+      _calls?.forEach(startTimerForItem);
+
       _reloading = false;
       notifyListeners();
     } catch (e) {
@@ -118,7 +126,7 @@ class CommunicationProvider with ChangeNotifier {
       if (logs.data['status'] == true) {
         _todayLogs = List.generate(
           logs.data['data'].length,
-          (index) => CommunicationModel.fromJson(
+              (index) => CommunicationModel.fromJson(
             logs.data["data"][index],
           ),
         ).toList();
@@ -129,5 +137,72 @@ class CommunicationProvider with ChangeNotifier {
       print(e);
     }
     notifyListeners();
+  }
+
+  /// ✅ हर item के लिए timer start
+  void startTimerForItem(CommunicationModel model) {
+    if (model.time == null) return;
+
+    try {
+      final parts = model.time!.split(":"); // ["12", "00 AM"]
+      int hour = int.parse(parts[0]);       // "12"
+      final minuteParts = parts[1].trim().split(" "); // ["00", "AM"]
+      int minute = int.parse(minuteParts[0]);
+      String period = minuteParts[1].toUpperCase();   // "AM" or "PM"
+
+      // 🔥 Proper AM/PM conversion
+      if (period == "AM") {
+        if (hour == 12) {
+          hour = 0; // 12 AM -> 0 hour
+        }
+      } else if (period == "PM") {
+        if (hour != 12) {
+          hour += 12; // 1PM -> 13, ... 11PM -> 23
+        }
+      }
+
+      DateTime scheduledTime = DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day,
+        hour,
+        minute,
+      );
+
+      model.timer?.cancel(); // पहले से चल रहा हो तो बंद करो
+
+      model.timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        final now = DateTime.now();
+        model.elapsedSeconds = now.difference(scheduledTime).inSeconds;
+
+        notifyListeners(); // UI update करो
+
+        if (model.elapsedSeconds > 60 && model.status == "pending") {
+          timer.cancel();
+          updateStatusAndRemove(model);
+        }
+      });
+    } catch (e) {
+      debugPrint("Time parse error: ${model.time} -> $e");
+    }
+  }
+
+
+  /// ✅ Status Update + Remove
+  Future<void> updateStatusAndRemove(CommunicationModel model) async {
+    try {
+      await CommunicationRepo.acceptOrRejectRequest(
+          communicationId: model.id.toString(),
+          status: 'misscall'
+      ); // तुम्हारी API
+    } catch (e) {
+      print("Error updating status: $e");
+    }
+
+    if (model.type == "chat") {
+      removeFormChat(model.id!);
+    } else {
+      removeFormCall(model.id!);
+    }
   }
 }

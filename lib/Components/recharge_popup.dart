@@ -10,7 +10,6 @@ homePopup(context) async {
         context: context,
         builder: (context) {
           return  AlertDialog(
-
            contentPadding: const EdgeInsets.all(0),
             insetPadding: const EdgeInsets.all(0),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),

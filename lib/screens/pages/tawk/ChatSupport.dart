@@ -1,27 +1,46 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tawk/flutter_tawk.dart';
-import 'package:fore_astro_2/providers/UserProfileProvider.dart';
-import 'package:provider/provider.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
-class ChatSupport extends StatelessWidget {
+class ChatSupport extends StatefulWidget {
   const ChatSupport({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Tawk(
-          directChatLink:
-              'https://tawk.to/chat/668cfb2ec3fb85929e3d20bb/1i2bbabtl',
-          placeholder: Center(
-            child: CircularProgressIndicator(),
-          ),
-          visitor: TawkVisitor(
-            name: context.read<UserProfileProvider>().userProfileModel!.name,
-            email: context.read<UserProfileProvider>().userProfileModel!.email,
-          ),
+  State<ChatSupport> createState() => _ChatSupportState();
+}
+
+class _ChatSupportState extends State<ChatSupport> {
+  late final WebViewController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted) // Tawk needs JS
+      ..setBackgroundColor(const Color(0x00000000))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageStarted: (url) {
+            debugPrint("Loading: $url");
+          },
+          onPageFinished: (url) {
+            debugPrint("Loaded: $url");
+          },
+          onWebResourceError: (error) {
+            debugPrint("Error: $error");
+          },
         ),
-      ),
+      )
+      ..loadRequest(
+        Uri.parse("https://tawk.to/chat/668cfb2ec3fb85929e3d20bb/1i2bbabtl"),
+      );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Live Chat")),
+      body: WebViewWidget(controller: _controller),
     );
   }
 }
