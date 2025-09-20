@@ -132,6 +132,7 @@ class SocketProvider with ChangeNotifier {
         socket?.emit("userBusy", {
           'userId': id.toString(),
           'userType': 'astro',
+          'message': 'fdgdsfdsfdsf',
           'requestType': data['requestType'],
           'data': data['data'],
         });

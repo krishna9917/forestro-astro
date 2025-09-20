@@ -20,6 +20,7 @@ import 'package:in_app_update/in_app_update.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zego_zimkit/zego_zimkit.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -30,6 +31,10 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
+  await ZIMKit().init(
+    appID: 1230629691,
+    appSign: '16464f848f6510fb18fef88047b37ddb297aeca244a348dc5b0151d40d192c86',
+  );
 debugPrint('main');
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 

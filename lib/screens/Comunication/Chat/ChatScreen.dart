@@ -19,6 +19,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/models/quickalert_type.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zego_zim/zego_zim.dart';
 import 'package:zego_zimkit/zego_zimkit.dart';
 
@@ -45,7 +46,7 @@ class _ChatScreenState extends State<ChatScreen> {
   late int remainingSeconds;
   late int _remainingSeconds;
   Timer? _sessionEndTimer;
-  bool _isSessionEnded = false;
+  final bool _isSessionEnded = false;
   bool _isBeeping = false;
   final AudioPlayer _player = AudioPlayer();
 
@@ -57,6 +58,7 @@ class _ChatScreenState extends State<ChatScreen> {
     final chatRatePerMinute =
         double.tryParse(userProfile?.chatChargesPerMin?.toString() ?? '1') ??
             1.0;
+    // chatzegocloud();
 
     // _remainingSeconds = chatRatePerMinute > 0
     //     ? (widget.user_wallet / chatRatePerMinute * 60).toInt()
@@ -65,11 +67,12 @@ class _ChatScreenState extends State<ChatScreen> {
     _remainingSeconds = chatRatePerMinute > 0
         ? (widget.user_wallet / chatRatePerMinute * 60).ceil()
         : 0;
-
-    context.read<SessionProvider>().newSession(RequestType.Chat);
-    requestToAccpted();
-    notResendTime();
-    _startCountdownTimer();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<SessionProvider>().newSession(RequestType.Chat);
+      requestToAccpted();
+      notResendTime();
+      _startCountdownTimer();
+    });
   }
 
   void _startCountdownTimer() {
@@ -136,6 +139,13 @@ class _ChatScreenState extends State<ChatScreen> {
             message: "Internal error on astrologer side. Try again.",
           );
     }
+  }
+
+  Future<void> chatzegocloud() async {
+    await ZIMKit().connectUser(
+      id: "${widget.userId}-astro",
+      name: "fghgfhghgfhgf",
+    );
   }
 
   notResendTime() async {
@@ -261,28 +271,28 @@ class _ChatScreenState extends State<ChatScreen> {
               disabledBorder: InputBorder.none,
               contentPadding: EdgeInsets.symmetric(horizontal: 0),
             ),
-            conversationID: widget.id,
+            conversationID: "23",
             conversationType: ZIMConversationType.peer,
           ),
-          // Positioned(
-          //   top: 16,
-          //   right: 16,
-          //   child: Container(
-          //     padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-          //     decoration: BoxDecoration(
-          //       color: Colors.black.withOpacity(0.6),
-          //       borderRadius: BorderRadius.circular(8),
-          //     ),
-          //     child: Text(
-          //       formatTime(_remainingSeconds),
-          //       style: const TextStyle(
-          //         color: Colors.white,
-          //         fontSize: 16,
-          //         fontWeight: FontWeight.bold,
-          //       ),
-          //     ),
-          //   ),
-          // ),
+          Positioned(
+            top: 16,
+            right: 16,
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.6),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                formatTime(_remainingSeconds),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
 
           Positioned(
             top: 35,
