@@ -6,6 +6,7 @@ import 'package:fore_astro_2/core/data/repository/couponRepo.dart';
 import 'package:fore_astro_2/core/helper/helper.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
 import 'package:fore_astro_2/providers/CouponProvider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class CouponsScreen extends StatefulWidget {
@@ -151,7 +152,7 @@ class _CouponViewBoxState extends State<CouponViewBox> {
             children: [
               Text(
                 widget.coupon.code.toString().toUpperCase(),
-                style: TextStyle(
+                style: GoogleFonts.inter(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                     color: AppColor.primary.withOpacity(0.7)),
@@ -159,15 +160,15 @@ class _CouponViewBoxState extends State<CouponViewBox> {
               const SizedBox(height: 5),
               Text(
                 "${widget.coupon.discount}${widget.coupon.discountType == "percent" ? "%" : " RS"} ",
-                style: const TextStyle(
+                style:  GoogleFonts.inter(
                   color: Colors.black,
                   fontSize: 35,
                   fontWeight: FontWeight.w900,
                 ),
               ),
-              const Text(
+               Text(
                 "OFF",
-                style: TextStyle(
+                style: GoogleFonts.inter(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                     color: Colors.black26),
@@ -194,7 +195,7 @@ class _CouponViewBoxState extends State<CouponViewBox> {
                         : widget.coupon.activeStatus == true
                             ? "Deactivate".toUpperCase()
                             : "ACTIVATE",
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    style:  GoogleFonts.inter(fontWeight: FontWeight.bold),
                   ),
                 ),
               ],

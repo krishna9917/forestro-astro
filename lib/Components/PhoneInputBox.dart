@@ -21,10 +21,10 @@ Widget InputPhoneNo(
     showFlagInInput: false,
     autofocus: autofocus,
     defaultCountry: IsoCode.IN,
-    style: const TextStyle(fontWeight: FontWeight.bold),
+    style:  GoogleFonts.inter(fontWeight: FontWeight.bold),
     decoration: InputDecoration(
       hintText: "Mobile Number",
-      hintStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+      hintStyle:  GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w400),
       border: outlineInputBorder,
       filled: true,
       fillColor: bgcolor ?? Colors.transparent,

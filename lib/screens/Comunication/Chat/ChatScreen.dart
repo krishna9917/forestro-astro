@@ -43,8 +43,8 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   Timer? _timer;
-  late int remainingSeconds;
-  late int _remainingSeconds;
+  int remainingSeconds = 0;
+  int _remainingSeconds = 0;
   Timer? _sessionEndTimer;
   final bool _isSessionEnded = false;
   bool _isBeeping = false;
@@ -53,25 +53,26 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    final userProfile = context.read<UserProfileProvider>().userProfileModel;
-
-    final chatRatePerMinute =
-        double.tryParse(userProfile?.chatChargesPerMin?.toString() ?? '1') ??
-            1.0;
+    // final userProfile = context.read<UserProfileProvider>().userProfileModel;
+    //
+    // final chatRatePerMinute =
+    //     double.tryParse(userProfile?.chatChargesPerMin?.toString() ?? '1') ??
+    //         1.0;
     // chatzegocloud();
 
     // _remainingSeconds = chatRatePerMinute > 0
     //     ? (widget.user_wallet / chatRatePerMinute * 60).toInt()
     //     : 0;
     // _remainingSeconds = (widget.user_wallet / chatRatePerMinute * 60).toInt();
-    _remainingSeconds = chatRatePerMinute > 0
-        ? (widget.user_wallet / chatRatePerMinute * 60).ceil()
-        : 0;
+    // _remainingSeconds = chatRatePerMinute > 0
+    //     ? (widget.user_wallet / chatRatePerMinute * 60).ceil()
+    //     : 0;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<SessionProvider>().newSession(RequestType.Chat);
-      requestToAccpted();
-      notResendTime();
-      _startCountdownTimer();
+      chatzegocloud();
+      // context.read<SessionProvider>().newSession(RequestType.Chat);
+      // requestToAccpted();
+      // notResendTime();
+      // _startCountdownTimer();
     });
   }
 
@@ -144,7 +145,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Future<void> chatzegocloud() async {
     await ZIMKit().connectUser(
       id: "${widget.userId}-astro",
-      name: "fghgfhghgfhgf",
+      name: "Astrologer",
     );
   }
 
@@ -271,7 +272,7 @@ class _ChatScreenState extends State<ChatScreen> {
               disabledBorder: InputBorder.none,
               contentPadding: EdgeInsets.symmetric(horizontal: 0),
             ),
-            conversationID: "23",
+            conversationID: widget.communicationId,
             conversationType: ZIMConversationType.peer,
           ),
           Positioned(
@@ -285,7 +286,7 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
               child: Text(
                 formatTime(_remainingSeconds),
-                style: const TextStyle(
+                style: GoogleFonts.inter(
                   color: Colors.white,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -293,7 +294,6 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             ),
           ),
-
           Positioned(
             top: 35,
             right: 40,
@@ -328,7 +328,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   const SizedBox(width: 8),
                   Text(
                     formatTime(_remainingSeconds),
-                    style:  GoogleFonts.inter(
+                    style: GoogleFonts.inter(
                       color: Colors.white,
                       fontSize: 24,
                       fontWeight: FontWeight.bold,

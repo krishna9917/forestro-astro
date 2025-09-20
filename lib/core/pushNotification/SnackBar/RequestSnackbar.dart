@@ -5,6 +5,7 @@ import 'package:fore_astro_2/Components/ViewImage.dart';
 import 'package:fore_astro_2/core/extensions/Text.dart';
 import 'package:fore_astro_2/core/helper/Navigate.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 SnackBar SnackBarBox(
     {required RequestType requestType,
@@ -55,7 +56,7 @@ SnackBar SnackBarBox(
                         "$name".capitalize(),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: TextStyle(
+                        style: GoogleFonts.inter(
                             color: AppColor.primary,
                             fontSize: 18,
                             fontWeight: FontWeight.bold),
@@ -63,7 +64,7 @@ SnackBar SnackBarBox(
                     ),
                     Text(
                       "Sent ${type.capitalize()} Request".capitalize(),
-                      style: const TextStyle(
+                      style:  GoogleFonts.inter(
                           color: Color(0xFF353433),
                           fontSize: 15,
                           fontWeight: FontWeight.w400),

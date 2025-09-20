@@ -178,7 +178,7 @@ class _AstroExamScreenState extends State<AstroExamScreen> {
                   children: [
                     Text(
                       "Q. ${qus.question}",
-                      style: const TextStyle(fontSize: 18),
+                      style:  GoogleFonts.inter(fontSize: 18),
                     ),
                     const SizedBox(height: 20),
                     TextField(

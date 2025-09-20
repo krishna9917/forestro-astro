@@ -150,7 +150,7 @@ class _CertificationPickerState extends State<CertificationPicker> {
                                 files[index].name,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
+                                style: GoogleFonts.inter(
                                   color: Color(0xFF515151),
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
@@ -159,7 +159,7 @@ class _CertificationPickerState extends State<CertificationPicker> {
                             ),
                             Text(
                               "${(files[index].size / 1024).round()} Kb",
-                              style: TextStyle(
+                              style: GoogleFonts.inter(
                                 color: Color(0xFF908686),
                                 fontSize: 13,
                                 fontWeight: FontWeight.w500,

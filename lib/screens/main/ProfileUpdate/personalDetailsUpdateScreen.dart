@@ -12,6 +12,7 @@ import 'package:fore_astro_2/core/helper/Navigate.dart';
 import 'package:fore_astro_2/core/helper/helper.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
 import 'package:fore_astro_2/providers/UserProfileProvider.dart';
+import 'package:fore_astro_2/screens/pages/kundli/SearchLocation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -103,67 +104,67 @@ class _PersonalDetailsUpdateScreenState
     }
   }
 
-  Future<void> getStateCity() async {
-    try {
-      final dio = Dio();
-      final url = "https://api.postalpincode.in/pincode/${pin.text}";
-
-
-      final response = await dio.get(url);
-
-
-      if (response.statusCode == 200) {
-        final res = response.data is String
-            ? jsonDecode(response.data)
-            : response.data;
-
-        if (res is List && res.isNotEmpty) {
-          final postOffices = res[0]["PostOffice"] as List?;
-
-          if (postOffices != null && postOffices.isNotEmpty) {
-            final first = postOffices.first as Map<String, dynamic>;
-
-            final stateValue = first["State"] ?? "";
-            final blockValue = first["Block"] ?? "";
-
-
-
-            setState(() {
-              state.text = stateValue;
-              city.text = blockValue;
-
-            });
-          } else {
-            setState(() {
-              state.text = "";
-              city.text = "";
-
-            });
-
-            showToast("No post office details found for this pin code.");
-          }
-        } else {
-
-          showToast("Invalid response format from API.");
-        }
-      } else {
-        print("❌ Server error: ${response.statusCode}");
-        setState(() {
-          state.text = "";
-          city.text = "";
-
-        });
-        showToast("Server error: ${response.statusCode}");
-      }
-    } on DioException catch (e) {
-      print("❌ Dio error: ${e.message}");
-      showToast("This pin code is not valid. Please try a different pin code.");
-    } catch (e) {
-
-      print("❌ Unexpected error: $e");
-      showToast("An unexpected error occurred. Please try again later.");
-    }
-  }
+  // Future<void> getStateCity() async {
+  //   try {
+  //     final dio = Dio();
+  //     final url = "https://api.postalpincode.in/pincode/${pin.text}";
+  //
+  //
+  //     final response = await dio.get(url);
+  //
+  //
+  //     if (response.statusCode == 200) {
+  //       final res = response.data is String
+  //           ? jsonDecode(response.data)
+  //           : response.data;
+  //
+  //       if (res is List && res.isNotEmpty) {
+  //         final postOffices = res[0]["PostOffice"] as List?;
+  //
+  //         if (postOffices != null && postOffices.isNotEmpty) {
+  //           final first = postOffices.first as Map<String, dynamic>;
+  //
+  //           final stateValue = first["State"] ?? "";
+  //           final blockValue = first["Block"] ?? "";
+  //
+  //
+  //
+  //           setState(() {
+  //             state.text = stateValue;
+  //             city.text = blockValue;
+  //
+  //           });
+  //         } else {
+  //           setState(() {
+  //             state.text = "";
+  //             city.text = "";
+  //
+  //           });
+  //
+  //           showToast("No post office details found for this pin code.");
+  //         }
+  //       } else {
+  //
+  //         showToast("Invalid response format from API.");
+  //       }
+  //     } else {
+  //       print("❌ Server error: ${response.statusCode}");
+  //       setState(() {
+  //         state.text = "";
+  //         city.text = "";
+  //
+  //       });
+  //       showToast("Server error: ${response.statusCode}");
+  //     }
+  //   } on DioException catch (e) {
+  //     print("❌ Dio error: ${e.message}");
+  //     showToast("This pin code is not valid. Please try a different pin code.");
+  //   } catch (e) {
+  //
+  //     print("❌ Unexpected error: $e");
+  //     showToast("An unexpected error occurred. Please try again later.");
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -260,11 +261,12 @@ class _PersonalDetailsUpdateScreenState
 
               CompleteProfileInputBox(
                 hintText: "Enter PinCode",
-                onChanged: ((value) {
-                  if (value.isNotEmpty && value.length > 5) {
-                    getStateCity();
-                  }
-                }),
+                // onChanged: ((value) {
+                //   if (value.isNotEmpty && value.length > 5) {
+                //     getStateCity();
+                //   }
+                // }),
+                maxLength: 6,
                 inputFormatter: [
                   LengthLimitingTextInputFormatter(6),
                   FilteringTextInputFormatter.digitsOnly
@@ -281,26 +283,49 @@ class _PersonalDetailsUpdateScreenState
               ),
               const SizedBox(height: 15),
               CompleteProfileInputBox(
-                hintText: "State",
-                enable:  false,
-                textEditingController: state,
-                title: "State",
-
-              ),
-              const SizedBox(height: 15),
-              CompleteProfileInputBox(
-                hintText: "City",
-
-                enable: false,
-                textEditingController: city,
-                title: "City",
-                validator: (e) {
-                  if (e == null || e.isEmpty) {
-                    return "Please Enter Your City";
-                  }
-                  return null;
+                title: "Enter Place",
+                textEditingController: TextEditingController(text: "${city.text}, ${state.text}"),
+                readOnly: true,
+                hintText: "Search with city name",
+                prefixIcon: const Icon(Icons.location_on_rounded),
+                onTap: () {
+                  navigateme.push(routeMe(GoogleMapSearchPlacesApi(
+                    onSelect: (e) {
+                      setState(() {
+                        if(e.city?.isEmpty??false || (e.state?.isEmpty??false)){
+                          showToast("Please search with city name");
+                        }else{
+                          city.text = e.city??"";
+                          state.text = e.state??"";
+                          // locationData = e;
+                        }
+                      });
+                    },
+                  )));
                 },
               ),
+
+              // CompleteProfileInputBox(
+              //   hintText: "State",
+              //   enable:  false,
+              //   textEditingController: state,
+              //   title: "State",
+              //
+              // ),
+              // const SizedBox(height: 15),
+              // CompleteProfileInputBox(
+              //   hintText: "City",
+              //
+              //   enable: false,
+              //   textEditingController: city,
+              //   title: "City",
+              //   validator: (e) {
+              //     if (e == null || e.isEmpty) {
+              //       return "Please Enter Your City";
+              //     }
+              //     return null;
+              //   },
+              // ),
               const SizedBox(height: 15),
               CompleteProfileInputBox(
                 title: "AADHAAR ID",
