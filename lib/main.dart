@@ -30,7 +30,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
-debugPrint('main');
+  debugPrint('main');
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   await Firebase.initializeApp(
@@ -102,6 +102,7 @@ void _handleGetExternalId() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
