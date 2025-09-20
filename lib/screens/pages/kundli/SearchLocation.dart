@@ -6,7 +6,7 @@ import 'package:fore_astro_2/core/helper/Navigate.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 
-Future<Map<String, double>> fetchCoordinates(String address) async {
+Future<Map<String, dynamic>> fetchCoordinates(String address) async {
   const apiKey = 'AIzaSyBXwHH1AuqJEY9yoxCPD_e04t9hEiYM9SQ';
   final url = Uri.parse(
     'https://maps.googleapis.com/maps/api/geocode/json?address=${Uri.encodeComponent(address)}&key=$apiKey',
@@ -16,10 +16,33 @@ Future<Map<String, double>> fetchCoordinates(String address) async {
 
   if (response.statusCode == 200) {
     final data = json.decode(response.body);
-    final location = data['results'][0]['geometry']['location'];
+
+    if (data['results'].isEmpty) {
+      throw Exception('No results found');
+    }
+
+    final result = data['results'][0];
+    final location = result['geometry']['location'];
+    final components = result['address_components'];
+
+    String? city;
+    String? state;
+
+    for (var c in components) {
+      List types = c['types'];
+      if (types.contains("locality")) {
+        city = c['long_name'];
+      }
+      if (types.contains("administrative_area_level_1")) {
+        state = c['long_name'];
+      }
+    }
+
     return {
       'lat': location['lat'],
       'lng': location['lng'],
+      'city': city ?? '',
+      'state': state ?? '',
     };
   } else {
     throw Exception('Failed to fetch coordinates');
@@ -28,10 +51,18 @@ Future<Map<String, double>> fetchCoordinates(String address) async {
 
 class ExpectAddressLatLog {
   String address;
-  double? let;
+  double? lat;
   double? lng;
-  ExpectAddressLatLog(
-      {required this.address, required this.let, required this.lng});
+  String? city;
+  String? state;
+
+  ExpectAddressLatLog({
+    required this.address,
+    required this.lat,
+    required this.lng,
+    this.city,
+    this.state,
+  });
 }
 
 class GoogleMapSearchPlacesApi extends StatefulWidget {
@@ -50,6 +81,7 @@ class _GoogleMapSearchPlacesApiState extends State<GoogleMapSearchPlacesApi> {
   String _sessionToken = '1234567890';
   List<dynamic> _placeList = [];
   bool loading = false;
+
   @override
   void initState() {
     super.initState();
@@ -59,7 +91,7 @@ class _GoogleMapSearchPlacesApiState extends State<GoogleMapSearchPlacesApi> {
   }
 
   _onChanged() {
-    if (_sessionToken == null) {
+    if (_sessionToken.isEmpty) {
       setState(() {
         _sessionToken = uuid.v4();
       });
@@ -88,7 +120,9 @@ class _GoogleMapSearchPlacesApiState extends State<GoogleMapSearchPlacesApi> {
       } else {
         throw Exception('Failed to load predictions');
       }
-    } catch (e) {}
+    } catch (e) {
+      if (kDebugMode) print("Error: $e");
+    }
   }
 
   @override
@@ -102,7 +136,7 @@ class _GoogleMapSearchPlacesApiState extends State<GoogleMapSearchPlacesApi> {
       ),
       body: Builder(builder: (context) {
         if (loading) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -110,12 +144,13 @@ class _GoogleMapSearchPlacesApiState extends State<GoogleMapSearchPlacesApi> {
             Padding(
               padding: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
               child: Align(
-                  alignment: Alignment.topCenter,
-                  child: CompleteProfileInputBox(
-                    title: "",
-                    autofocus: true,
-                    textEditingController: _controller,
-                  )),
+                alignment: Alignment.topCenter,
+                child: CompleteProfileInputBox(
+                  title: "",
+                  autofocus: true,
+                  textEditingController: _controller,
+                ),
+              ),
             ),
             Expanded(
               child: ListView.builder(
@@ -124,33 +159,34 @@ class _GoogleMapSearchPlacesApiState extends State<GoogleMapSearchPlacesApi> {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () async {
-                      // Navigator.pop(context, _placeList[index]["description"]);
                       FocusScope.of(context).unfocus();
 
                       try {
                         setState(() {
                           loading = true;
                         });
-                        Map<String, double> data = await fetchCoordinates(
-                            _placeList[index]["description"]);
-                        widget.onSelect(ExpectAddressLatLog(
-                          address: _placeList[index]["description"],
-                          let: data['lat'],
-                          lng: data['lng'],
-                        ));
+
+                        Map<String, dynamic> data = await fetchCoordinates(
+                          _placeList[index]["description"],
+                        );
+
+                        widget.onSelect(
+                          ExpectAddressLatLog(
+                            address: _placeList[index]["description"],
+                            lat: data['lat'],
+                            lng: data['lng'],
+                            city: data['city'],
+                            state: data['state'],
+                          ),
+                        );
 
                         navigateme.pop();
                       } catch (e) {
                         setState(() {
                           loading = false;
                         });
+                        if (kDebugMode) print("Error selecting place: $e");
                       }
-                      // setState(
-                      //   () {
-                      //     _controller.text = _placeList[index]["description"];
-                      //     _placeList = [];
-                      //   },
-                      // );
                     },
                     child: ListTile(
                       title: Text(_placeList[index]["description"]),

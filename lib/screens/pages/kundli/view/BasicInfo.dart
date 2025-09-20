@@ -109,7 +109,7 @@ class BasicInfo extends StatelessWidget {
                 children: [
                   UserInfoBoxContent(
                     title: "Latitude",
-                    content: expectAddressLatLog.let.toString(),
+                    content: expectAddressLatLog.lat.toString(),
                   ),
                   UserInfoBoxContent(
                     title: "Longitude",

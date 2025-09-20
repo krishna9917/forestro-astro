@@ -34,8 +34,8 @@ ThemeData appTheme = ThemeData(
         showUnselectedLabels: false,
         backgroundColor: Colors.white,
         elevation: 0,
-        selectedLabelStyle: TextStyle(color: AppColor.primary),
-        unselectedLabelStyle: TextStyle(color: Colors.grey)),
+        selectedLabelStyle: GoogleFonts.inter(color: AppColor.primary),
+        unselectedLabelStyle: GoogleFonts.inter(color: Colors.grey)),
     actionIconTheme: ActionIconThemeData(
       drawerButtonIconBuilder: (context) {
         return SvgPicture.asset(
@@ -55,7 +55,7 @@ ThemeData appTheme = ThemeData(
       elevation: 0,
       backgroundColor: AppColor.bgcolor,
       surfaceTintColor: Colors.transparent,
-      titleTextStyle: const TextStyle(
+      titleTextStyle:  GoogleFonts.inter(
           fontWeight: FontWeight.bold, color: Colors.black, fontSize: 18),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
@@ -69,8 +69,8 @@ ThemeData appTheme = ThemeData(
             side: BorderSide.none,
           ),
         ),
-        textStyle: const MaterialStatePropertyAll(
-          TextStyle(
+        textStyle:  MaterialStatePropertyAll(
+          GoogleFonts.inter(
             color: Colors.white,
             fontWeight: FontWeight.bold,
             fontSize: 15,
@@ -96,7 +96,7 @@ ThemeData appTheme = ThemeData(
         ),
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
-        textStyle: MaterialStatePropertyAll(TextStyle(color: AppColor.primary)),
+        textStyle: MaterialStatePropertyAll(GoogleFonts.inter(color: AppColor.primary)),
         foregroundColor: MaterialStatePropertyAll(AppColor.primary),
         surfaceTintColor: MaterialStatePropertyAll(Colors.transparent),
         splashFactory: NoSplash.splashFactory,

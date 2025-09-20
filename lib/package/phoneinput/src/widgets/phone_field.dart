@@ -8,6 +8,7 @@ import 'package:fore_astro_2/package/phoneinput/src/widgets/country_code_chip.da
 import 'package:fore_astro_2/package/phoneinput/src/widgets/country_selector/country_selector_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 /// Phone field
 ///
@@ -254,7 +255,7 @@ class PhoneFieldState extends State<PhoneField> {
                 showFlag: widget.showFlagInInput,
                 countryCodeTextStyle: widget.countryCodeStyle ??
                     widget.decoration.labelStyle ??
-                    TextStyle(
+                    GoogleFonts.inter(
                       height: 1.2,
                       fontSize: 16,
                       color: Theme.of(context).textTheme.bodySmall?.color,

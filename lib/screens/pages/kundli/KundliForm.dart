@@ -56,7 +56,7 @@ class _KundliFormState extends State<KundliForm> {
         _adress.text = "${user!.city},${user!.state},${user!.country}";
         locationData = ExpectAddressLatLog(
           address: "${user!.city},${user!.state},${user!.country}",
-          let: latlong['lat'],
+          lat: latlong['lat'],
           lng: latlong['lng'],
         );
         _dob.text = user!.dateOfBirth.toString().replaceAll("-", "/");
@@ -86,7 +86,7 @@ class _KundliFormState extends State<KundliForm> {
           lang: _lang,
           dob: _dob.text,
           tob: _dot.text,
-          lat: locationData!.let!,
+          lat: locationData!.lat!,
           lon: locationData!.lng!);
       PlanetModel planetModel = PlanetModel.fromJson(planetDetails);
 
@@ -95,7 +95,7 @@ class _KundliFormState extends State<KundliForm> {
           lang: _lang,
           dob: _dob.text,
           tob: _dot.text,
-          lat: locationData!.let!,
+          lat: locationData!.lat!,
           lon: locationData!.lng!);
 
       AsedentReportModel ascendantReportModel =
@@ -113,7 +113,7 @@ class _KundliFormState extends State<KundliForm> {
           lang: _lang,
           dob: _dob.text,
           tob: _dot.text,
-          lat: locationData!.let!,
+          lat: locationData!.lat!,
           lon: locationData!.lng!);
 
       Personal_Characteristics_Model personalCharacteristicsModel =
@@ -124,7 +124,7 @@ class _KundliFormState extends State<KundliForm> {
           lang: _lang,
           dob: _dob.text,
           tob: _dot.text,
-          lat: locationData!.let!,
+          lat: locationData!.lat!,
           lon: locationData!.lng!);
 
       KpHouseModel kpHouseModel = KpHouseModel.fromJson(kphouses);
@@ -134,7 +134,7 @@ class _KundliFormState extends State<KundliForm> {
           lang: _lang,
           dob: _dob.text,
           tob: _dot.text,
-          lat: locationData!.let!,
+          lat: locationData!.lat!,
           lon: locationData!.lng!);
       print(binnashtakvarga);
       Binnashtakvarga_Model binnashtakvarga_model =
@@ -144,14 +144,14 @@ class _KundliFormState extends State<KundliForm> {
           lang: _lang,
           dob: _dob.text,
           tob: _dot.text,
-          lat: locationData!.let!,
+          lat: locationData!.lat!,
           lon: locationData!.lng!);
 
       //  var d9Image = await VedicAstroAPIRepo.divisionalChartData(
 
       // dob: _dob.text,
       // tob: _dot.text,
-      // lat: locationData!.let!,
+      // lat: locationData!.lat!,
       // lon: locationData!.lng!, div: '');
 
       Vimsotridasa_Model? mahadshamodel;
@@ -159,7 +159,7 @@ class _KundliFormState extends State<KundliForm> {
         var vimsotridasa = await VedicAstroAPIRepo.vimsotridasa(
           _dob.text,
           _dot.text,
-          locationData!.let!,
+          locationData!.lat!,
           locationData!.lng!,
           _lang,
         );
@@ -172,13 +172,13 @@ class _KundliFormState extends State<KundliForm> {
           lang: _lang,
           dob: _dob.text,
           tob: _dot.text,
-          lat: locationData!.let!,
+          lat: locationData!.lat!,
           lon: locationData!.lng!);
       var kundaliImages = await VedicAstroAPIRepo.getkundaliImages(
           lang: _lang,
           dob: _dob.text,
           tob: _dot.text,
-          lat: locationData!.let!,
+          lat: locationData!.lat!,
           lon: locationData!.lng!);
 
       setState(() {
@@ -200,7 +200,7 @@ class _KundliFormState extends State<KundliForm> {
           // vimsotridasa: vimsotridasa,
           dob: _dob.text,
           tob: _dot.text,
-          lat: locationData!.let!,
+          lat: locationData!.lat!,
           lng: locationData!.lng!,
           lang: _lang,
           mahadshamodel: mahadshamodel!,

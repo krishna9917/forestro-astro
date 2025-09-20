@@ -165,15 +165,15 @@ class AppDrawer extends StatelessWidget {
                         final buildNumber = snapshot.data!.buildNumber;
                         return Text(
                           "Version: $version ($buildNumber)",
-                          style: const TextStyle(
+                          style:  GoogleFonts.inter(
                             fontSize: 14,
                             color: Colors.grey,
                           ),
                         );
                       } else {
-                        return const Text(
+                        return  Text(
                           "Version: N/A",
-                          style: TextStyle(
+                          style: GoogleFonts.inter(
                             fontSize: 14,
                             color: Colors.grey,
                           ),

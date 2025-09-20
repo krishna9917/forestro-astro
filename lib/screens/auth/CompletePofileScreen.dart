@@ -18,6 +18,7 @@ import 'package:fore_astro_2/core/helper/Navigate.dart';
 import 'package:fore_astro_2/core/helper/helper.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
 import 'package:fore_astro_2/screens/auth/Exam/AstroExamScreen.dart';
+import 'package:fore_astro_2/screens/pages/kundli/SearchLocation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -424,11 +425,13 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
 
                             CompleteProfileInputBox(
                               hintText: "Enter PinCode",
-                              onChanged: ((value) {
-                                if (value.isNotEmpty && value.length > 5) {
-                                  getStateCity();
-                                }
-                              }),
+                              maxLength: 6,
+
+                              // onChanged: ((value) {
+                              //   if (value.isNotEmpty && value.length > 5) {
+                              //     getStateCity();
+                              //   }
+                              // }),
                               inputFormatter: [
                                 LengthLimitingTextInputFormatter(6),
                                 FilteringTextInputFormatter.digitsOnly
@@ -445,25 +448,47 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                             ),
                             const SizedBox(height: 15),
                             CompleteProfileInputBox(
-                              hintText: "State",
-                              enable:  false,
-                              textEditingController: state,
-                              title: "State",
-
-                            ),
-                            const SizedBox(height: 15),
-                            CompleteProfileInputBox(
-                              hintText: "City",
-                              enable: false,
-                              textEditingController: city,
-                              title: "City",
-                              validator: (e) {
-                                if (e == null || e.isEmpty) {
-                                  return "Please Enter Your City";
-                                }
-                                return null;
+                              title: "Enter Place",
+                              textEditingController: TextEditingController(text: "${city.text}, ${state.text}"),
+                              readOnly: true,
+                              hintText: "Search with city name",
+                              prefixIcon: const Icon(Icons.location_on_rounded),
+                              onTap: () {
+                                navigateme.push(routeMe(GoogleMapSearchPlacesApi(
+                                  onSelect: (e) {
+                                    setState(() {
+                                      if(e.city?.isEmpty??false || (e.state?.isEmpty??false)){
+                                        showToast("Please search with city name");
+                                      }else{
+                                        city.text = e.city??"";
+                                        state.text = e.state??"";
+                                        // locationData = e;
+                                      }
+                                    });
+                                  },
+                                )));
                               },
                             ),
+                            // CompleteProfileInputBox(
+                            //   hintText: "State",
+                            //   enable:  false,
+                            //   textEditingController: state,
+                            //   title: "State",
+                            //
+                            // ),
+                            // const SizedBox(height: 15),
+                            // CompleteProfileInputBox(
+                            //   hintText: "City",
+                            //   enable: false,
+                            //   textEditingController: city,
+                            //   title: "City",
+                            //   validator: (e) {
+                            //     if (e == null || e.isEmpty) {
+                            //       return "Please Enter Your City";
+                            //     }
+                            //     return null;
+                            //   },
+                            // ),
 
                             const SizedBox(height: 35),
                             SizedBox(
