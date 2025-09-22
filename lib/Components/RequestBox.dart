@@ -233,7 +233,7 @@ class RecquestBox extends StatelessWidget {
                             shape: WidgetStatePropertyAll(
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10)))),
-                        child:  Text(
+                        child: Text(
                           "Decline",
                           style: GoogleFonts.inter(
                             fontSize: 14,

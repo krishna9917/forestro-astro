@@ -35,14 +35,23 @@ RequestType getRequestType(String type) {
 class SocketProvider with ChangeNotifier {
   final CommunicationProvider communicationProvider;
   AudioPlayer player = AudioPlayer();
+
   SocketProvider({required this.communicationProvider});
+
   Map? _workdata;
 
   bool _iAmWorkScreen = false;
+  bool _isWettingAlertOpen = false;
   IO.Socket? _socket;
+
   IO.Socket? get socket => _socket;
+
   bool? get socketConnected => _socket?.connected;
+
   bool get iAmWorkScreen => _iAmWorkScreen;
+
+  bool get isWettingAlertOpen => _isWettingAlertOpen;
+
   Map? get workdata => _workdata;
   double wallet = 0.0;
 
@@ -88,6 +97,14 @@ class SocketProvider with ChangeNotifier {
       //   socket?.emit("decline", data);
       //   return;
       // }
+
+      // Prevent multiple alerts from opening
+      if (_isWettingAlertOpen) {
+        print("Wetting alert already open, ignoring duplicate event");
+        return;
+      }
+
+      _isWettingAlertOpen = true;
       print("walletwetting===============$data");
       showAlertPopup(
         navigate.currentContext!,
@@ -99,6 +116,7 @@ class SocketProvider with ChangeNotifier {
         barrierDismissible: true,
         cancelBtnText: "Close",
         onCancelBtnTap: () {
+          _isWettingAlertOpen = false;
           socket?.emit("decline", data);
           navigateme.pop();
         },
@@ -115,6 +133,7 @@ class SocketProvider with ChangeNotifier {
       //     navigateme.pop();
       //   }
       // }
+      _isWettingAlertOpen = false;
       showToast("Request Cancel");
     });
 
@@ -148,6 +167,7 @@ class SocketProvider with ChangeNotifier {
         // for close Wetting popup
         navigateme.pop();
       }
+      _isWettingAlertOpen = false;
       if (data['requestType'] == "chat") {
         print("data_for_chat$data");
         navigateme.push(routeMe(ChatScreen(
@@ -243,6 +263,7 @@ class SocketProvider with ChangeNotifier {
   void onWorkEnd() {
     _iAmWorkScreen = false;
     _workdata = null;
+    _isWettingAlertOpen = false;
     notifyListeners();
   }
 
@@ -255,7 +276,7 @@ class SocketProvider with ChangeNotifier {
     required CommunicationModel communicationModel,
     required Map data,
   }) {
-    print('dataaacpect===============$data');
+    print('comunucationnnnnnnnnnn: $data');
     if (status.toLowerCase() == "reject") {
       print(communicationId);
       if (requestType == "chat") {
@@ -277,6 +298,17 @@ class SocketProvider with ChangeNotifier {
         ...data,
       },
     });
+
+    print('dataaacpect===============${{
+      'userId': senderId,
+      'userType': 'user',
+      'requestType': requestType,
+      'data': {
+        ...communicationModel.toJson(),
+        "status": status,
+        ...data,
+      },
+    }}');
   }
 
   void closeSession(
@@ -324,13 +356,14 @@ class SocketProvider with ChangeNotifier {
     socket?.emit("endLiveSession");
 
     onWorkEnd();
-   
+
     // navigateme.popUntil((route) => route.isFirst);
   }
 
   Future logoutUse() async {
     await logoutFromDB();
     socket?.disconnect();
+    _isWettingAlertOpen = false;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
     navigateme.popUntil((route) => route.isFirst);

@@ -36,7 +36,6 @@ class CommunicationRepo {
       );
       return await apiRequest.send<T>();
     } catch (e) {
-
       print("Error in loadAllChatCallRequest: $e");
 
       // Show error toast
@@ -46,14 +45,8 @@ class CommunicationRepo {
         ),
       );
 
-
       // Restart the app after a delay
-      Future.delayed(Duration(seconds: 2), () {
-
-
-
-
-      });
+      Future.delayed(Duration(seconds: 2), () {});
       rethrow;
     }
   }
@@ -68,7 +61,6 @@ class CommunicationRepo {
             "communication_id": communicationId,
             "status": status,
           }));
-      print('apiRequest.body${apiRequest.body}');
       return await apiRequest.send<T>();
     } catch (e) {
       print(e);
@@ -76,8 +68,7 @@ class CommunicationRepo {
     }
   }
 
-
-   static Future<Response> communicationchargesupdate<T>(
+  static Future<Response> communicationchargesupdate<T>(
       {required String communicationId, required String time}) async {
     try {
       ApiRequest apiRequest = ApiRequest("$apiUrl/communication-charges-update",

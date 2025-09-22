@@ -30,6 +30,7 @@ class AudioCallScreen extends StatefulWidget {
   final String userid;
   final String communicationId;
   final double user_wallet;
+
   @override
   State<AudioCallScreen> createState() => _AudioCallScreenState();
 }
@@ -41,6 +42,7 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
   bool _isBeeping = false;
   final AudioPlayer _player = AudioPlayer();
   bool _isTimerStarted = false;
+
   @override
   void initState() {
     final userProfile = context.read<UserProfileProvider>().userProfileModel;
@@ -121,6 +123,7 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
           communicationId: widget.communicationId, status: "accept");
       context.read<CommunicationProvider>().reloadComunication();
     } catch (e) {
+
       showToast(e.toString());
       context.read<SocketProvider>().closeSession(
             communicationId: widget.communicationId,
@@ -166,13 +169,16 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
         children: [
           ZegoUIKitPrebuiltCall(
               appID: 844833851,
-              appSign: '136a48b12cd722234938f6d8613362686b991c1e50784524851803fb7fdab1ab',
+              appSign:
+                  '136a48b12cd722234938f6d8613362686b991c1e50784524851803fb7fdab1ab',
               userID: widget.userid,
               userName: context
                   .read<UserProfileProvider>()
                   .userProfileModel!
                   .name
-                  .toString().split(' ').first,
+                  .toString()
+                  .split(' ')
+                  .first,
               events: ZegoUIKitPrebuiltCallEvents(
                 user: ZegoCallUserEvents(
                   onEnter: (p) {
@@ -261,7 +267,7 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
                   const SizedBox(width: 8),
                   Text(
                     formatTime(_remainingSeconds),
-                    style:  GoogleFonts.inter(
+                    style: GoogleFonts.inter(
                       color: Colors.white,
                       fontSize: 24,
                       fontWeight: FontWeight.bold,

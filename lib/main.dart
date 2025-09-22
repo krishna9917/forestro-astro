@@ -35,7 +35,6 @@ void main(List<String> args) async {
     appID: 1230629691,
     appSign: '16464f848f6510fb18fef88047b37ddb297aeca244a348dc5b0151d40d192c86',
   );
-debugPrint('main');
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   await Firebase.initializeApp(
@@ -67,7 +66,7 @@ debugPrint('main');
             communicationProvider: context.read<CommunicationProvider>(),
           ),
           update: (context, communicationProvider, previousSocketProvider) =>
-              previousSocketProvider!,
+               previousSocketProvider!,
         )
       ],
       child: const MyApp(),
@@ -107,6 +106,7 @@ void _handleGetExternalId() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
