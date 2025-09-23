@@ -55,7 +55,8 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         ? (widget.user_wallet / chatRatePerMinute * 60).toInt()
         : 0;
 
-    context.read<SessionProvider>().newSession(RequestType.Chat);
+    // Correct session type for video
+    context.read<SessionProvider>().newSession(RequestType.Video);
     requestToAccpted();
     _startCountdownTimer();
     super.initState();
@@ -63,12 +64,12 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
   void _startCountdownTimer() {
     _timer?.cancel();
-    print("Starting countdown timer with $_remainingSeconds seconds.");
+    // Remove noisy logs
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
       if (_remainingSeconds > 0) {
         setState(() {
           _remainingSeconds--;
-          print("Remaining seconds: $_remainingSeconds");
+          // keep UI only
         });
 
         if (_remainingSeconds == 120 && !_isBeeping) {
@@ -78,7 +79,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         }
       } else {
         timer.cancel();
-        print("Countdown finished.");
+        // end
       }
     });
   }
@@ -91,7 +92,8 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         await Future.delayed(const Duration(milliseconds: 500));
       }
     } catch (e) {
-      print('Audio play error: $e');
+      // Only log errors
+      debugPrint('Audio play error: $e');
     }
   }
 

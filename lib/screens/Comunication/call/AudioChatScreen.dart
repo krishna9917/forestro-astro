@@ -59,7 +59,8 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
         ? (widget.user_wallet / chatRatePerMinute * 60).ceil()
         : 0;
 
-    context.read<SessionProvider>().newSession(RequestType.Chat);
+    // Correct session type for audio
+    context.read<SessionProvider>().newSession(RequestType.Audio);
     requestToAccpted();
 
     _startCountdownTimer();
@@ -68,12 +69,12 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
 
   void _startCountdownTimer() {
     _timer?.cancel();
-    print("Starting countdown timer with $_remainingSeconds seconds.");
+    // Remove noisy logs
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
       if (_remainingSeconds > 0) {
         setState(() {
           _remainingSeconds--;
-          print("Remaining seconds: $_remainingSeconds");
+          // keep UI only
         });
 
         if (_remainingSeconds == 120 && !_isBeeping) {
@@ -83,7 +84,7 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
         }
       } else {
         timer.cancel();
-        print("Countdown finished.");
+        // end
       }
     });
   }
@@ -96,7 +97,8 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
         await Future.delayed(const Duration(milliseconds: 500));
       }
     } catch (e) {
-      print('Audio play error: $e');
+      // Only log errors
+      debugPrint('Audio play error: $e');
     }
   }
 

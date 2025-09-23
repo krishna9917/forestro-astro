@@ -55,7 +55,7 @@ android {
 
     defaultConfig {
         applicationId "com.foreastro.astrologer"
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 23
         targetSdkVersion 36   // ✅ upgraded from 33 → 36
         versionCode 31
         versionName "1.0.1"

@@ -33,6 +33,12 @@ class CommunicationProvider with ChangeNotifier {
         int count = 0;
 
         for (var element in data) {
+          // Only show pending requests in lists
+          final status = element['status']?.toString().toLowerCase();
+          if (status != null && status != 'pending') {
+            continue;
+          }
+
           if (element['type'].toString() == "chat") {
             chats.add(CommunicationModel.fromJson({...element, 'slot': count}));
           } else {
