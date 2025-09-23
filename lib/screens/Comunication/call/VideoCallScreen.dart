@@ -53,9 +53,11 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         double.tryParse(userProfile?.videoChargesPerMin?.toString() ?? '1') ??
             1.0;
 
-    _remainingSeconds = chatRatePerMinute > 0
-        ? (widget.user_wallet / chatRatePerMinute * 60).toInt()
-        : 0;
+    // Round down wallet to nearest divisible by per-minute charge
+    double totalWallet = widget.user_wallet;
+    double perMin = chatRatePerMinute;
+    double usableWallet = (totalWallet ~/ perMin) * perMin; // floor to divisible
+    _remainingSeconds = perMin > 0 ? ((usableWallet / perMin) * 60).toInt() : 0;
 
     // Correct session type for video
     context.read<SessionProvider>().newSession(RequestType.Video);

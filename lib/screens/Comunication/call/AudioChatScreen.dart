@@ -55,15 +55,16 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
     //     ? (widget.user_wallet / chatRatePerMinute * 60).toInt()
     //     : 0;
 
-    _remainingSeconds = chatRatePerMinute > 0
-        ? (widget.user_wallet / chatRatePerMinute * 60).ceil()
-        : 0;
+    // Round down wallet to nearest divisible by per-minute charge
+    double totalWallet = widget.user_wallet;
+    double perMin = chatRatePerMinute;
+    double usableWallet = (totalWallet ~/ perMin) * perMin; // floor to divisible
+    _remainingSeconds = perMin > 0 ? ((usableWallet / perMin) * 60).toInt() : 0;
 
     // Correct session type for audio
     context.read<SessionProvider>().newSession(RequestType.Audio);
     requestToAccpted();
 
-    _startCountdownTimer();
     super.initState();
   }
 
@@ -158,10 +159,6 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (!_isTimerStarted) {
-      _startCountdownTimer();
-      _isTimerStarted = true;
-    }
   }
 
   @override
@@ -182,12 +179,24 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
                   .split(' ')
                   .first,
               events: ZegoUIKitPrebuiltCallEvents(
+                room: ZegoCallRoomEvents(
+                  onStateChanged: (e) {
+                    if (!_isTimerStarted) {
+                      _startCountdownTimer();
+                      _isTimerStarted = true;
+                    }
+                  },
+                ),
                 user: ZegoCallUserEvents(
                   onEnter: (p) {
                     showToast(p.name.toString() + " join in call");
                     context
                         .read<SessionProvider>()
                         .newSession(RequestType.Audio);
+                    if (!_isTimerStarted) {
+                      _startCountdownTimer();
+                      _isTimerStarted = true;
+                    }
                   },
                 ),
                 onCallEnd: (event, defaultAction) async {
