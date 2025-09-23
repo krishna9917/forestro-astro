@@ -49,42 +49,37 @@ class _ChatScreenState extends State<ChatScreen> {
   final bool _isSessionEnded = false;
   bool _isBeeping = false;
   final AudioPlayer _player = AudioPlayer();
+  bool _zimReady = false;
+  late final ValueNotifier<int> _remainingSecondsNotifier =
+      ValueNotifier<int>(_remainingSeconds);
 
   @override
   void initState() {
     super.initState();
-    // final userProfile = context.read<UserProfileProvider>().userProfileModel;
-    //
-    // final chatRatePerMinute =
-    //     double.tryParse(userProfile?.chatChargesPerMin?.toString() ?? '1') ??
-    //         1.0;
-    // chatzegocloud();
+    final userProfile = context.read<UserProfileProvider>().userProfileModel;
+    final chatRatePerMinute =
+        double.tryParse(userProfile?.chatChargesPerMin?.toString() ?? '1') ??
+            1.0;
 
-    // _remainingSeconds = chatRatePerMinute > 0
-    //     ? (widget.user_wallet / chatRatePerMinute * 60).toInt()
-    //     : 0;
-    // _remainingSeconds = (widget.user_wallet / chatRatePerMinute * 60).toInt();
-    // _remainingSeconds = chatRatePerMinute > 0
-    //     ? (widget.user_wallet / chatRatePerMinute * 60).ceil()
-    //     : 0;
+    _remainingSeconds = chatRatePerMinute > 0
+        ? (widget.user_wallet / chatRatePerMinute * 60).toInt()
+        : 0;
+
+    context.read<SessionProvider>().newSession(RequestType.Chat);
+    requestToAccpted();
+    _startCountdownTimer();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       chatzegocloud();
-      // context.read<SessionProvider>().newSession(RequestType.Chat);
-      // requestToAccpted();
-      // notResendTime();
-      // _startCountdownTimer();
     });
   }
 
   void _startCountdownTimer() {
     _timer?.cancel();
-    print("Starting countdown timer with $_remainingSeconds seconds.");
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
       if (_remainingSeconds > 0) {
-        setState(() {
-          _remainingSeconds--;
-          print("Remaining seconds: $_remainingSeconds");
-        });
+        _remainingSeconds--;
+        _remainingSecondsNotifier.value = _remainingSeconds;
 
         if (_remainingSeconds == 120 && !_isBeeping) {
           _isBeeping = true;
@@ -93,7 +88,6 @@ class _ChatScreenState extends State<ChatScreen> {
         }
       } else {
         timer.cancel();
-        print("Countdown finished.");
       }
     });
   }
@@ -120,6 +114,8 @@ class _ChatScreenState extends State<ChatScreen> {
   void dispose() {
     _player.dispose();
     _timer?.cancel();
+    _sessionEndTimer?.cancel();
+    _remainingSecondsNotifier.dispose();
     super.dispose();
   }
 
@@ -143,15 +139,22 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future<void> chatzegocloud() async {
+    final prefs = await SharedPreferences.getInstance();
+    final astroId = prefs.getString("id");
     await ZIMKit().connectUser(
-      id: "${widget.userId}-astro",
+      id: "${astroId}-astro",
       name: "Astrologer",
     );
+    if (mounted) {
+      setState(() {
+        _zimReady = true;
+      });
+    }
   }
 
   notResendTime() async {
-    // _timer?.cancel();
-    _timer = Timer.periodic(const Duration(minutes: 2), (timer) {
+    _sessionEndTimer?.cancel();
+    _sessionEndTimer = Timer.periodic(const Duration(minutes: 2), (timer) {
       if (!_isSessionEnded) {
         onUserEndChat();
       }
@@ -167,6 +170,7 @@ class _ChatScreenState extends State<ChatScreen> {
           communicationId: widget.communicationId,
         );
     _timer?.cancel();
+    _sessionEndTimer?.cancel();
     context.read<SessionProvider>().closeSession();
     context.read<SocketProvider>().onWorkEnd();
     navigateme.pop();
@@ -179,6 +183,23 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     print(widget.id);
+    if (!_zimReady) {
+      return const Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(height: 12),
+              Text(
+                "Please wait, we are connecting...",
+                style: TextStyle(color: Colors.black54),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
     return WillPopScope(
       onWillPop: () async {
         _timer?.cancel();
@@ -272,70 +293,59 @@ class _ChatScreenState extends State<ChatScreen> {
               disabledBorder: InputBorder.none,
               contentPadding: EdgeInsets.symmetric(horizontal: 0),
             ),
-            conversationID: widget.communicationId,
+            // Use peer user ID for ZIM peer conversation, not DB/call id
+            conversationID: widget.id,
             conversationType: ZIMConversationType.peer,
           ),
+          // Removed small duplicate countdown to avoid two timers
           Positioned(
-            top: 16,
-            right: 16,
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.6),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(
-                formatTime(_remainingSeconds),
-                style: GoogleFonts.inter(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            top: 35,
-            right: 40,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [
-                    Color.fromARGB(255, 125, 122, 122),
-                    Color.fromARGB(151, 234, 231, 227)
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    offset: const Offset(2, 4),
-                    blurRadius: 6,
+            top: 5,
+            right: 50,
+            child: SafeArea(
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [
+                      Color.fromARGB(255, 125, 122, 122),
+                      Color.fromARGB(151, 234, 231, 227)
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
-                ],
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(
-                    Icons.timer_outlined,
-                    color: Colors.white,
-                    size: 24,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    formatTime(_remainingSeconds),
-                    style: GoogleFonts.inter(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      decoration: TextDecoration.none,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      offset: const Offset(2, 4),
+                      blurRadius: 6,
                     ),
-                  ),
-                ],
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.timer_outlined,
+                      color: Colors.white,
+                      size: 24,
+                    ),
+                    const SizedBox(width: 8),
+                    ValueListenableBuilder<int>(
+                      valueListenable: _remainingSecondsNotifier,
+                      builder: (context, value, _) => Text(
+                        formatTime(value),
+                        style: GoogleFonts.inter(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.none,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

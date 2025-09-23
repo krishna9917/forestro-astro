@@ -171,7 +171,7 @@ class SocketProvider with ChangeNotifier {
               VideoCallScreen(
                 communicationId: data['data']['id'].toString(),
                 callID: data['data']['communication_id'],
-                userid: astroId ?? data['userId'].toString(),
+                userid: "astro_" + (astroId ?? data['userId'].toString()),
                 user_wallet: wallet,
               ),
             ),
@@ -182,7 +182,7 @@ class SocketProvider with ChangeNotifier {
               AudioCallScreen(
                 communicationId: data['data']['id'].toString(),
                 callID: data['data']['communication_id'],
-                userid: astroId ?? data['userId'].toString(),
+                userid: "astro_" + (astroId ?? data['userId'].toString()),
                 user_wallet: wallet,
               ),
             ),
