@@ -10,6 +10,7 @@ class CommunicationProvider with ChangeNotifier {
   List<CommunicationModel>? _todayLogs;
   int _currentSlots = 0;
   bool _reloading = false;
+  final Set<int> _statusUpdatedIds = <int>{};
 
   List<CommunicationModel>? get chats => _chats;
   List<CommunicationModel>? get calls => _calls;
@@ -147,49 +148,22 @@ class CommunicationProvider with ChangeNotifier {
 
   /// ✅ हर item के लिए timer start
   void startTimerForItem(CommunicationModel model) {
-    if (model.time == null) return;
-
     try {
-      final parts = model.time!.split(":"); // ["12", "00 AM"]
-      int hour = int.parse(parts[0]);       // "12"
-      final minuteParts = parts[1].trim().split(" "); // ["00", "AM"]
-      int minute = int.parse(minuteParts[0]);
-      String period = minuteParts[1].toUpperCase();   // "AM" or "PM"
-
-      // 🔥 Proper AM/PM conversion
-      if (period == "AM") {
-        if (hour == 12) {
-          hour = 0; // 12 AM -> 0 hour
-        }
-      } else if (period == "PM") {
-        if (hour != 12) {
-          hour += 12; // 1PM -> 13, ... 11PM -> 23
-        }
-      }
-
-      DateTime scheduledTime = DateTime(
-        DateTime.now().year,
-        DateTime.now().month,
-        DateTime.now().day,
-        hour,
-        minute,
-      );
-
-      model.timer?.cancel(); // पहले से चल रहा हो तो बंद करो
+      model.timer?.cancel();
+      model.elapsedSeconds = 0;
 
       model.timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-        final now = DateTime.now();
-        model.elapsedSeconds = now.difference(scheduledTime).inSeconds;
+        model.elapsedSeconds = (model.elapsedSeconds) + 1;
+        notifyListeners();
 
-        notifyListeners(); // UI update करो
-
-        if (model.elapsedSeconds > 60 && model.status == "pending") {
+        // Auto-misscall strictly after 30 seconds of no action from astro
+        if (model.elapsedSeconds >= 30 && (model.status ?? '').toLowerCase() == 'pending' && !_statusUpdatedIds.contains(model.id)) {
           timer.cancel();
           updateStatusAndRemove(model);
         }
       });
     } catch (e) {
-      debugPrint("Time parse error: ${model.time} -> $e");
+      debugPrint("Timer start error: $e");
     }
   }
 
@@ -197,10 +171,16 @@ class CommunicationProvider with ChangeNotifier {
   /// ✅ Status Update + Remove
   Future<void> updateStatusAndRemove(CommunicationModel model) async {
     try {
+      if (_statusUpdatedIds.contains(model.id ?? -1)) return;
+      if ((model.status ?? '').toLowerCase() != 'pending') {
+        _statusUpdatedIds.add(model.id ?? -1);
+        return;
+      }
       await CommunicationRepo.acceptOrRejectRequest(
           communicationId: model.id.toString(),
           status: 'misscall'
-      ); // तुम्हारी API
+      );
+      _statusUpdatedIds.add(model.id ?? -1);
     } catch (e) {
       print("Error updating status: $e");
     }
