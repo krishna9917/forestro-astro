@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fore_astro_2/core/data/api/ApiRequest.dart';
 import 'package:fore_astro_2/core/data/model/UserProfileModel.dart';
@@ -12,6 +13,7 @@ import 'package:fore_astro_2/screens/auth/LoginScreen.dart';
 import 'package:fore_astro_2/screens/auth/WattingScreen.dart';
 import 'package:fore_astro_2/screens/main/HomeTabScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fore_astro_2/screens/common/NoInternetScreen.dart';
 
 class UserProfileProvider with ChangeNotifier {
   UserProfileModel? _userProfileModel;
@@ -71,13 +73,13 @@ class UserProfileProvider with ChangeNotifier {
         navigateme.pushReplacement(routeMe(const LoginScreen()));
       }
     } on DioException catch (e) {
-      if (e.response?.statusCode == 401) {
-        await prefs.clear();
-        navigateme.pushReplacement(routeMe(const LoginScreen()));
-        return false;
-      }
       print(e);
       showToast(toastError);
+    } on SocketException catch (_) {
+      // route to NoInternet screen
+      try {
+        navigateme.push(routeMe(const NoInternetScreen()));
+      } catch (_) {}
     } catch (e) {
       print(e);
 

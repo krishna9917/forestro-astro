@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:fore_astro_2/screens/internetConnection/NoInternetPage.dart';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +38,7 @@ class _SplashScreenState extends State<SplashScreen>
       duration: const Duration(seconds: 60),
     )..repeat();
     get();
+    _checkInternetAndInitialize();
 // Here Our Task
 //     Timer(const Duration(seconds: 1), () async {
 //       // ZIMKit().init(
@@ -55,6 +58,21 @@ class _SplashScreenState extends State<SplashScreen>
 //     });
   }
 
+  Future<void> _checkInternetAndInitialize() async {
+    try {
+      final results = await Connectivity().checkConnectivity();
+      if (results.contains(ConnectivityResult.none)) {
+        if (!mounted) return;
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const NoInternetPage()),
+          (route) => false,
+        );
+        return;
+      }
+      // if needed add listeners in providers later
+    } catch (_) {}
+  }
+
   get() async {
     await requestPermissions();
     await context.read<UserProfileProvider>().getUserDataSplash();
@@ -66,7 +84,12 @@ class _SplashScreenState extends State<SplashScreen>
       _version = packageInfo.version;
       _buildNumber = packageInfo.buildNumber;
     });
-    await AuthRepo.version(_version, _buildNumber);
+    try {
+      await AuthRepo.version(_version, _buildNumber)
+          .timeout(const Duration(seconds: 4));
+    } catch (_) {
+      // ignore version ping failure/redirect; don't block splash
+    }
     // print(
     //     "build version number =======>>>>>>>>>>>>$_version $_buildNumber $response");
   }

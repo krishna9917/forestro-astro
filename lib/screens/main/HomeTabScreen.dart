@@ -43,6 +43,7 @@ class HomeTabScreen extends StatefulWidget {
 class _HomeTabScreenState extends State<HomeTabScreen>
     with WidgetsBindingObserver {
   int tabindex = 0;
+  Timer? _reloadTimer;
 
   @override
   void initState() {
@@ -50,9 +51,6 @@ class _HomeTabScreenState extends State<HomeTabScreen>
     onInitTask();
     WidgetsBinding.instance.addObserver(this);
     initOneSignal();
-    Timer.periodic(const Duration(seconds: 1), (timer) async {
-      context.read<CommunicationProvider>().reloadComunication();
-    });
 
     super.initState();
   }
@@ -84,17 +82,33 @@ class _HomeTabScreenState extends State<HomeTabScreen>
     setAwesomeNotificationsListeners();
     UserProfileModel user =
         context.read<UserProfileProvider>().userProfileModel!;
+    // Ensure astro_id is persisted for API layers that read from SharedPreferences
     try {
-      await ZIMKit().connectUser(
-        id: "${user.astroId}-astro",
-        name: user.name!,
-        avatarUrl: user.profileImg ?? AssetsPath.avatarPic,
-      );
+      final prefs = await SharedPreferences.getInstance();
+      final currentId = prefs.getString("id");
+      final targetId = user.astroId?.toString();
+      if (targetId != null && targetId.isNotEmpty && currentId != targetId) {
+        await prefs.setString("id", targetId);
+      }
+    } catch (_) {}
+    try {
+      final String targetId = "${user.astroId}-astro";
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        try {
+          await ZIMKit().connectUser(
+            id: targetId,
+            name: user.name!,
+            avatarUrl: user.profileImg ?? AssetsPath.avatarPic,
+          );
+        } catch (e) {
+          print(e);
+        }
+      });
     } catch (e) {
       print(e);
     }
     context.read<BankAccountProvider>().initLoadBanks();
-    context.read<CommunicationProvider>().loadInitData();
+    await context.read<CommunicationProvider>().loadInitData();
     // context.read<UserProfileProvider>().getUserDataSplash();
     context.read<SocketProvider>().initSocketConnection().then((value) {
       if (value?.active == true) {
@@ -104,6 +118,20 @@ class _HomeTabScreenState extends State<HomeTabScreen>
     print("INIt");
     await NotificationRepo.setToken();
     await NotificationRepo.sendsignal();
+
+    // Start periodic reload only after initial data and IDs are ready
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final id = prefs.getString("id");
+      final token = prefs.getString("token");
+      _reloadTimer?.cancel();
+      if (mounted && id != null && id.isNotEmpty && token != null && token.isNotEmpty) {
+        _reloadTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+          if (!mounted) return;
+          context.read<CommunicationProvider>().reloadComunication();
+        });
+      }
+    } catch (_) {}
   }
 
   Future<void> initOneSignal() async {
@@ -134,6 +162,7 @@ class _HomeTabScreenState extends State<HomeTabScreen>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _reloadTimer?.cancel();
     super.dispose();
   }
 

@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fore_astro_2/core/data/model/CommunicationModel.dart';
 import 'package:fore_astro_2/core/data/repository/communicationRepo.dart';
+import 'package:fore_astro_2/core/helper/Navigate.dart';
+import 'package:fore_astro_2/screens/common/NoInternetScreen.dart';
 
 class CommunicationProvider with ChangeNotifier {
   List<CommunicationModel>? _chats;
@@ -76,6 +79,17 @@ class CommunicationProvider with ChangeNotifier {
       _calls?.forEach(startTimerForItem);
 
       notifyListeners();
+    } on DioException catch (_) {
+      _calls = [];
+      _chats = [];
+      notifyListeners();
+    } on SocketException catch (_) {
+      _calls = [];
+      _chats = [];
+      notifyListeners();
+      try {
+        navigateme.push(routeMe(const NoInternetScreen()));
+      } catch (_) {}
     } catch (e) {
       _calls = [];
       _chats = [];
@@ -85,6 +99,12 @@ class CommunicationProvider with ChangeNotifier {
 
   Future reloadComunication({bool? isReload}) async {
     try {
+      // Skip reload if not authenticated yet
+      // (prevents 401 spam and unnecessary UI churn during splash/login)
+      // Note: Repositories read id/token from SharedPreferences internally
+      // so this fast short-circuit avoids wasted calls.
+      // If needed, a more robust auth state can be injected.
+      // For now, we proceed directly to loadData which will throw on 401.
       if (isReload == true) {
         _reloading = true;
         notifyListeners();
@@ -101,6 +121,16 @@ class CommunicationProvider with ChangeNotifier {
 
       _reloading = false;
       notifyListeners();
+    } on DioException catch (e) {
+      print(e);
+      _reloading = false;
+      notifyListeners();
+    } on SocketException catch (_) {
+      _reloading = false;
+      notifyListeners();
+      try {
+        navigateme.push(routeMe(const NoInternetScreen()));
+      } catch (_) {}
     } catch (e) {
       print(e);
       _reloading = false;

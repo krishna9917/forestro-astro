@@ -21,6 +21,7 @@ class PreviewChatScreen extends StatelessWidget {
     return Theme(
       data: appTheme.copyWith(),
       child: ZIMKitMessageListPage(
+        key: ValueKey('preview-${id}'),
         // showOnly: true,
         showPickMediaButton: false,
         showMoreButton: false,

@@ -33,10 +33,22 @@ class CommunicationRepo {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? id = prefs.getString("id");
+      String? token = prefs.getString("token");
+
+      if (id == null || id.isEmpty || token == null || token.isEmpty) {
+        // Return an empty response shape to avoid 401s until auth is ready
+        return Response(
+          requestOptions:
+              RequestOptions(path: "$apiUrl/all-communication-request"),
+          data: {"status": true, "data": []},
+          statusCode: 200,
+        );
+      }
 
       ApiRequest apiRequest = ApiRequest(
         "$apiUrl/all-communication-request?astro_id=$id",
         method: ApiMethod.GET,
+        ignoreUnauthorized: true,
       );
       return await apiRequest.send<T>();
     } catch (e) {

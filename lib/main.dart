@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,8 @@ import 'package:fore_astro_2/providers/liveDataProvider.dart';
 import 'package:fore_astro_2/providers/sessionProvider.dart';
 import 'package:fore_astro_2/providers/sockets/socketProvider.dart';
 import 'package:fore_astro_2/screens/splash/SplashScreen.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:fore_astro_2/screens/internetConnection/NoInternetPage.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
@@ -33,8 +36,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
   await ZIMKit().init(
-    appID: ZegoKeys.appID,
-    appSign: ZegoKeys.appSign,
+    appID: ZegoKeys.chatAppID,
+    appSign: ZegoKeys.chatAppSign,
   );
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -123,7 +126,7 @@ class MyApp extends StatelessWidget {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             _checkForUpdate(context);
           });
-          return child!;
+          return GlobalConnectivityObserver(child: child!);
         },
         // home: SendRemedyScreen(),
       ),
@@ -144,5 +147,64 @@ Future<void> _checkForUpdate(BuildContext context) async {
     }
   } catch (e) {
     debugPrint("Error checking for updates: $e");
+  }
+}
+
+class GlobalConnectivityObserver extends StatefulWidget {
+  final Widget child;
+  const GlobalConnectivityObserver({super.key, required this.child});
+
+  @override
+  State<GlobalConnectivityObserver> createState() => _GlobalConnectivityObserverState();
+}
+
+class _GlobalConnectivityObserverState extends State<GlobalConnectivityObserver> {
+  StreamSubscription<List<ConnectivityResult>>? _subscription;
+  bool _navigated = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkInitial();
+    _subscription = Connectivity().onConnectivityChanged.listen((results) {
+      if (results.contains(ConnectivityResult.none)) {
+        _goNoInternet();
+      } else {
+        _navigated = false;
+      }
+    });
+  }
+
+  Future<void> _checkInitial() async {
+    try {
+      final results = await Connectivity().checkConnectivity();
+      if (results.contains(ConnectivityResult.none)) {
+        _goNoInternet();
+      } else {
+        _navigated = false;
+      }
+    } catch (_) {}
+  }
+
+  void _goNoInternet() {
+    if (_navigated) return;
+    _navigated = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      navigateme.pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const NoInternetPage()),
+        (route) => false,
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
   }
 }

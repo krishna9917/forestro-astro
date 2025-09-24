@@ -141,15 +141,22 @@ class _ChatScreenState extends State<ChatScreen> {
   Future<void> chatzegocloud() async {
     final prefs = await SharedPreferences.getInstance();
     final astroId = prefs.getString("id");
-    await ZIMKit().connectUser(
-      id: "${astroId}-astro",
-      name: "Astrologer",
-    );
-    if (mounted) {
-      setState(() {
-        _zimReady = true;
-      });
-    }
+    final String targetId = "${astroId}-astro";
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      try {
+        await ZIMKit().connectUser(
+          id: targetId,
+          name: "Astrologer",
+        );
+        if (mounted) {
+          setState(() {
+            _zimReady = true;
+          });
+        }
+      } catch (e) {
+        // ignore and keep loader; ZIM will handle state
+      }
+    });
   }
 
   notResendTime() async {
@@ -219,6 +226,7 @@ class _ChatScreenState extends State<ChatScreen> {
       child: Stack(
         children: [
           ZIMKitMessageListPage(
+            key: ValueKey('chat-${widget.id}'),
             showPickMediaButton: true,
             showMoreButton: false,
             showPickFileButton: false,
