@@ -82,7 +82,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void _startCountdownTimer() {
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-      if (_remainingSeconds > 60) {
+      if (_remainingSeconds > 0) {
         _remainingSeconds--;
         _remainingSecondsNotifier.value = _remainingSeconds;
         if (_remainingSeconds == 120 && !_isBeeping) {
@@ -90,8 +90,8 @@ class _ChatScreenState extends State<ChatScreen> {
           await _playBeepSound();
           _isBeeping = false;
         }
-      } else if (_remainingSeconds == 60) {
-        // Match user app: stop countdown and end session at 60s left
+      } else if (_remainingSeconds == 0) {
+        // Stop countdown and end session at 0s left
         timer.cancel();
         onUserEndChat();
       }

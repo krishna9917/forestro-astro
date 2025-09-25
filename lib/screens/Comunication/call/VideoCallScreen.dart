@@ -69,7 +69,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     _timer?.cancel();
     // Remove noisy logs
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-      if (_remainingSeconds > 60) {
+      if (_remainingSeconds > 0) {
         setState(() {
           _remainingSeconds--;
         });
@@ -78,7 +78,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
           await _playBeepSound();
           _isBeeping = false; // Reset beeping flag
         }
-      } else if (_remainingSeconds == 60) {
+      } else if (_remainingSeconds == 0) {
         timer.cancel();
         // End session to match user app behavior
         context.read<SessionProvider>().closeSession();
