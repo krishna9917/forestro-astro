@@ -136,6 +136,9 @@ class SocketProvider with ChangeNotifier {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         String? astroId = prefs.getString("id");
 
+        final sessionData = (data['data'] as Map?) ?? {};
+        final walletStr = sessionData['walletAmount']?.toString() ?? '0';
+        wallet = double.tryParse(walletStr) ?? 0;
         if (iAmWorkScreen) {
           socket?.emit("userBusy", {
             'userId': astroId.toString(),
@@ -151,12 +154,12 @@ class SocketProvider with ChangeNotifier {
           communicationProvider.nextSlots();
           notifyListeners();
         }
-      snackbarKey.currentState?.hideCurrentSnackBar();
-      if (navigateme.canPop()) {
-        // for close Wetting popup
-        navigateme.pop();
-      }
-      _isWettingAlertOpen = false;
+        snackbarKey.currentState?.hideCurrentSnackBar();
+        if (navigateme.canPop()) {
+          // for close Wetting popup
+          navigateme.pop();
+        }
+        _isWettingAlertOpen = false;
         if (data['requestType'] == "chat") {
           navigateme.push(routeMe(ChatScreen(
             id: "${data['userId']}-user",
