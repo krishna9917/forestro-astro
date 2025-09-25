@@ -72,20 +72,18 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
     _timer?.cancel();
     // Remove noisy logs
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-      if (_remainingSeconds > 0) {
+      if (_remainingSeconds > 60) {
         setState(() {
           _remainingSeconds--;
-          // keep UI only
         });
-
         if (_remainingSeconds == 120 && !_isBeeping) {
           _isBeeping = true;
           await _playBeepSound();
           _isBeeping = false;
         }
-      } else {
+      } else if (_remainingSeconds == 60) {
         timer.cancel();
-        // end
+        await _endCallSession();
       }
     });
   }

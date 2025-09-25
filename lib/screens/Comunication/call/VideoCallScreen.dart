@@ -69,20 +69,25 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     _timer?.cancel();
     // Remove noisy logs
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-      if (_remainingSeconds > 0) {
+      if (_remainingSeconds > 60) {
         setState(() {
           _remainingSeconds--;
-          // keep UI only
         });
-
         if (_remainingSeconds == 120 && !_isBeeping) {
           _isBeeping = true;
           await _playBeepSound();
           _isBeeping = false; // Reset beeping flag
         }
-      } else {
+      } else if (_remainingSeconds == 60) {
         timer.cancel();
-        // end
+        // End session to match user app behavior
+        context.read<SessionProvider>().closeSession();
+        context.read<SocketProvider>().onWorkEnd();
+        navigateme.pop();
+        navigateme.pushAndRemoveUntil(
+          routeMe(EndVideoSession(communicationId: widget.communicationId)),
+          (Route<dynamic> route) => false,
+        );
       }
     });
     _timerStarted = true;

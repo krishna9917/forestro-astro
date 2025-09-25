@@ -61,9 +61,14 @@ class _ChatScreenState extends State<ChatScreen> {
         double.tryParse(userProfile?.chatChargesPerMin?.toString() ?? '1') ??
             1.0;
 
-    _remainingSeconds = chatRatePerMinute > 0
-        ? (widget.user_wallet / chatRatePerMinute * 60).toInt()
-        : 0;
+    // Match user app: use only full divisible minutes
+    if (chatRatePerMinute > 0) {
+      final double perMin = chatRatePerMinute;
+      final double usableWallet = (widget.user_wallet ~/ perMin) * perMin;
+      _remainingSeconds = ((usableWallet / perMin) * 60).toInt();
+    } else {
+      _remainingSeconds = 0;
+    }
 
     context.read<SessionProvider>().newSession(RequestType.Chat);
     requestToAccpted();
@@ -77,17 +82,18 @@ class _ChatScreenState extends State<ChatScreen> {
   void _startCountdownTimer() {
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-      if (_remainingSeconds > 0) {
+      if (_remainingSeconds > 60) {
         _remainingSeconds--;
         _remainingSecondsNotifier.value = _remainingSeconds;
-
         if (_remainingSeconds == 120 && !_isBeeping) {
           _isBeeping = true;
           await _playBeepSound();
           _isBeeping = false;
         }
-      } else {
+      } else if (_remainingSeconds == 60) {
+        // Match user app: stop countdown and end session at 60s left
         timer.cancel();
+        onUserEndChat();
       }
     });
   }
