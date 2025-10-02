@@ -24,6 +24,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class CompleteProfileScreen extends StatefulWidget {
   const CompleteProfileScreen({super.key});
+
   @override
   State<CompleteProfileScreen> createState() => _CompleteProfileScreenState();
 }
@@ -44,23 +45,20 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
   final TextEditingController _aadheerController = TextEditingController();
   final TextEditingController _panController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
-  TextEditingController city=TextEditingController();
-  TextEditingController state=TextEditingController();
-  TextEditingController pin=TextEditingController();
+  TextEditingController city = TextEditingController();
+  TextEditingController state = TextEditingController();
+  TextEditingController pin = TextEditingController();
 
   Future<void> getStateCity() async {
     try {
       final dio = Dio();
       final url = "https://api.postalpincode.in/pincode/${pin.text}";
 
-
       final response = await dio.get(url);
 
-
       if (response.statusCode == 200) {
-        final res = response.data is String
-            ? jsonDecode(response.data)
-            : response.data;
+        final res =
+            response.data is String ? jsonDecode(response.data) : response.data;
 
         if (res is List && res.isNotEmpty) {
           final postOffices = res[0]["PostOffice"] as List?;
@@ -71,31 +69,25 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
             final stateValue = first["State"] ?? "";
             final blockValue = first["Block"] ?? "";
 
-
-
             setState(() {
               state.text = stateValue;
               city.text = blockValue;
-
             });
           } else {
             setState(() {
               state.text = "";
               city.text = "";
-
             });
 
             showToast("No post office details found for this pin code.");
           }
         } else {
-
           showToast("Invalid response format from API.");
         }
       } else {
         setState(() {
           state.text = "";
           city.text = "";
-
         });
         showToast("Server error: ${response.statusCode}");
       }
@@ -103,7 +95,6 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
       print("❌ Dio error: ${e.message}");
       showToast("This pin code is not valid. Please try a different pin code.");
     } catch (e) {
-
       print("❌ Unexpected error: $e");
       showToast("An unexpected error occurred. Please try again later.");
     }
@@ -125,18 +116,14 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
       return false;
     }
 
-
-
     if (state.text.isEmpty || city.text.isEmpty || pin.text.isEmpty) {
       showToast("Complete Your Address Details");
       return false;
     }
-    if (pin.text.length<6) {
+    if (pin.text.length < 6) {
       showToast("Invalid PinCode");
       return false;
     }
-
-
 
     if (langue.isEmpty) {
       showToast("Select Your Languages");
@@ -267,7 +254,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                     ],
                   ),
                   const SizedBox(height: 15),
-                   Center(
+                  Center(
                     child: Text(
                       'Complete your Profile',
                       style: GoogleFonts.inter(
@@ -399,7 +386,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                               },
                             ),
                             const SizedBox(height: 22),
-                             Padding(
+                            Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Text(
                                 'Address',
@@ -449,19 +436,24 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                             const SizedBox(height: 15),
                             CompleteProfileInputBox(
                               title: "Enter Place",
-                              textEditingController: TextEditingController(text: "${city.text}, ${state.text}"),
+                              textEditingController: TextEditingController(
+                                  text: "${city.text}, ${state.text}"),
                               readOnly: true,
                               hintText: "Search with city name",
                               prefixIcon: const Icon(Icons.location_on_rounded),
                               onTap: () {
-                                navigateme.push(routeMe(GoogleMapSearchPlacesApi(
+                                navigateme
+                                    .push(routeMe(GoogleMapSearchPlacesApi(
                                   onSelect: (e) {
                                     setState(() {
-                                      if(e.city?.isEmpty??false || (e.state?.isEmpty??false)){
-                                        showToast("Please search with city name");
-                                      }else{
-                                        city.text = e.city??"";
-                                        state.text = e.state??"";
+                                      if (e.city?.isEmpty ??
+                                          false ||
+                                              (e.state?.isEmpty ?? false)) {
+                                        showToast(
+                                            "Please search with city name");
+                                      } else {
+                                        city.text = e.city ?? "";
+                                        state.text = e.state ?? "";
                                         // locationData = e;
                                       }
                                     });
@@ -515,7 +507,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                                       ),
                                     );
                                   }
-                                  return  Text(
+                                  return Text(
                                     "Submit",
                                     style: GoogleFonts.inter(fontSize: 20),
                                   );

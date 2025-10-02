@@ -70,7 +70,7 @@ void main(List<String> args) async {
             communicationProvider: context.read<CommunicationProvider>(),
           ),
           update: (context, communicationProvider, previousSocketProvider) =>
-               previousSocketProvider!,
+              previousSocketProvider!,
         )
       ],
       child: const MyApp(),
@@ -152,13 +152,16 @@ Future<void> _checkForUpdate(BuildContext context) async {
 
 class GlobalConnectivityObserver extends StatefulWidget {
   final Widget child;
+
   const GlobalConnectivityObserver({super.key, required this.child});
 
   @override
-  State<GlobalConnectivityObserver> createState() => _GlobalConnectivityObserverState();
+  State<GlobalConnectivityObserver> createState() =>
+      _GlobalConnectivityObserverState();
 }
 
-class _GlobalConnectivityObserverState extends State<GlobalConnectivityObserver> {
+class _GlobalConnectivityObserverState
+    extends State<GlobalConnectivityObserver> {
   StreamSubscription<List<ConnectivityResult>>? _subscription;
   bool _navigated = false;
 
