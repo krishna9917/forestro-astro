@@ -35,6 +35,7 @@ class HomeTabView extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
                 readOnly: true,
+                textCapitalization: TextCapitalization.words,
                 onTap: () {
                   navigateme.push(routeMe(const SearchRequestScreen()));
                 },

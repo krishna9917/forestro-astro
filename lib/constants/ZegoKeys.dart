@@ -1,21 +1,17 @@
 class ZegoKeys {
   // Core Zego credentials used across the app
-  static const int appID = 844833851;
+  static const int appID = 2007373594;
   static const String appSign =
-      '136a48b12cd722234938f6d8613362686b991c1e50784524851803fb7fdab1ab';
+      '387754e51af7af0caf777a6a742a2d7bcfdf3ea1599131e1ff6cf5d1826649ae';
 
   // Optional: separate live streaming creds
-  static const int liveAppID = 2101331696;
+  static const int liveAppID = 1263406172;
   static const String liveAppSign =
-      '77838d88881dda6ac10b83406f2fb2027e946802d016035e98b58e7af4823dba';
+      '22481c4b299f9f7ae5cc0013991870ce22c4c22750d71b150c4a93509fc5be59';
 
-  // // Optional: chat/history creds
-  // static const int chatAppID = 2007373594;
-  // static const String chatAppSign =
-  //     '387754e51af7af0caf777a6a742a2d7bcfdf3ea1599131e1ff6cf5d1826649ae';
 
   // Chat (ZIM) credentials
-  static const int chatAppID = 1230629691;
+  static const int chatAppID = 1432355811;
   static const String chatAppSign =
-      '16464f848f6510fb18fef88047b37ddb297aeca244a348dc5b0151d40d192c86';
+      'fb0256f502da88184adb163037bd05d7d26bf3ac029ca9d38d4a071f3f52bdfd';
 }

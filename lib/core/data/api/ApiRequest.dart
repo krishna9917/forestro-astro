@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 // Removed auto-logout navigation
 
 Logger logger = Logger();
-String apiUrl = "https://foreastro.technovaedge.in/api";
+String apiUrl = "https://foreastro.com/api";
 // String apiUrl = "https://foreastro.com/api";
 String apiKundliUrl = "https://api.vedicastroapi.com/v3-json";
 
@@ -136,7 +136,7 @@ class ApiRequest {
           }
           // Update global apiUrl so subsequent requests use the working domain
           apiUrl = apiUrl.replaceFirst(
-              "https://foreastro.technovaedge.in", "https://foreastro.com");
+              "https://foreastro.com", "https://foreastro.com");
           // Removed auto-logout logic in retry branch as well
           return data;
         } on DioException catch (retryError) {

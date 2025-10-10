@@ -62,6 +62,7 @@ class _SearchRequestScreenState extends State<SearchRequestScreen> {
             onEditingComplete: () => searchRequests(),
             autofocus: true,
             keyboardType: TextInputType.name,
+            textCapitalization: TextCapitalization.words,
             controller: controller,
             decoration: const InputDecoration(
               hintText: "Search Request",

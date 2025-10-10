@@ -16,6 +16,7 @@ import 'package:fore_astro_2/providers/bankAccoutProvider.dart';
 import 'package:fore_astro_2/providers/liveDataProvider.dart';
 import 'package:fore_astro_2/providers/sessionProvider.dart';
 import 'package:fore_astro_2/providers/sockets/socketProvider.dart';
+import 'package:fore_astro_2/screens/auth/CompletePofileScreen.dart';
 import 'package:fore_astro_2/screens/splash/SplashScreen.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:fore_astro_2/screens/internetConnection/NoInternetPage.dart';

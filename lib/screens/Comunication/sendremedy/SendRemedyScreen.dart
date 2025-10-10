@@ -85,6 +85,7 @@ class _SendRemedyScreenState extends State<SendRemedyScreen> {
               TextField(
                 controller: _controller,
                 maxLines: 8,
+                textCapitalization: TextCapitalization.words,
                 decoration: const InputDecoration(
                   fillColor: Colors.white,
                   filled: true,

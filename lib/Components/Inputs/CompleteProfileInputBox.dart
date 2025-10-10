@@ -59,6 +59,7 @@ class CompleteProfileInputBox extends StatelessWidget {
           enabled: enable??true,
           controller: textEditingController,
           keyboardType: keyboardType,
+          textCapitalization: TextCapitalization.words,
           validator: validator,
           maxLength: maxLength,
           maxLines: maxLines,
