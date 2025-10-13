@@ -184,6 +184,7 @@ class _AstroExamScreenState extends State<AstroExamScreen> {
                     TextField(
                       maxLines: qus.type == "input" ? 1 : 6,
                       controller: _answerEditingController,
+                      textCapitalization: TextCapitalization.words,
                       decoration: const InputDecoration(
                         fillColor: Colors.white,
                         filled: true,

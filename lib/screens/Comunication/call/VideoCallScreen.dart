@@ -42,6 +42,8 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   bool _isSessionEnded = false;
   bool _isBeeping = false;
   final AudioPlayer _player = AudioPlayer();
+  bool _isConnecting = true;
+  bool _timerStarted = false;
 
   @override
   void initState() {
@@ -51,36 +53,44 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         double.tryParse(userProfile?.videoChargesPerMin?.toString() ?? '1') ??
             1.0;
 
-    _remainingSeconds = chatRatePerMinute > 0
-        ? (widget.user_wallet / chatRatePerMinute * 60).toInt()
-        : 0;
+    // Round down wallet to nearest divisible by per-minute charge
+    double totalWallet = widget.user_wallet;
+    double perMin = chatRatePerMinute;
+    double usableWallet = (totalWallet ~/ perMin) * perMin; // floor to divisible
+    _remainingSeconds = perMin > 0 ? ((usableWallet / perMin) * 60).toInt() : 0;
 
-    context.read<SessionProvider>().newSession(RequestType.Chat);
+    // Correct session type for video
+    context.read<SessionProvider>().newSession(RequestType.Video);
     requestToAccpted();
-    _startCountdownTimer();
     super.initState();
   }
 
   void _startCountdownTimer() {
     _timer?.cancel();
-    print("Starting countdown timer with $_remainingSeconds seconds.");
+    // Remove noisy logs
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
       if (_remainingSeconds > 0) {
         setState(() {
           _remainingSeconds--;
-          print("Remaining seconds: $_remainingSeconds");
         });
-
         if (_remainingSeconds == 120 && !_isBeeping) {
           _isBeeping = true;
           await _playBeepSound();
           _isBeeping = false; // Reset beeping flag
         }
-      } else {
+      } else if (_remainingSeconds == 0) {
         timer.cancel();
-        print("Countdown finished.");
+        // End session to match user app behavior
+        context.read<SessionProvider>().closeSession();
+        context.read<SocketProvider>().onWorkEnd();
+        navigateme.pop();
+        navigateme.pushAndRemoveUntil(
+          routeMe(EndVideoSession(communicationId: widget.communicationId)),
+          (Route<dynamic> route) => false,
+        );
       }
     });
+    _timerStarted = true;
   }
 
   Future<void> _playBeepSound() async {
@@ -91,7 +101,8 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         await Future.delayed(const Duration(milliseconds: 500));
       }
     } catch (e) {
-      print('Audio play error: $e');
+      // Only log errors
+      debugPrint('Audio play error: $e');
     }
   }
 
@@ -109,12 +120,12 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     } catch (e) {
       showToast(e.toString());
       context.read<SocketProvider>().closeSession(
-        communicationId: widget.communicationId,
-        userType: "user",
-        senderId: widget.userid,
-        requestType: "video",
-        message: "Internal error On Astrologer Side. Try Again",
-      );
+            communicationId: widget.communicationId,
+            userType: "user",
+            senderId: widget.userid,
+            requestType: "video",
+            message: "Internal error On Astrologer Side. Try Again",
+          );
     }
   }
 
@@ -127,127 +138,170 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: true,
-      child: Stack(
-        children: [
-          ZegoUIKitPrebuiltCall(
-            appID: 844833851,
-            appSign: '136a48b12cd722234938f6d8613362686b991c1e50784524851803fb7fdab1ab',
-            userID: widget.userid,
-            userName: context
-                .read<UserProfileProvider>()
-                .userProfileModel!
-                .name
-                .toString().split(' ').first,
-            callID: widget.callID,
-            // userID: widget.userid,
-            // callID: widget.callID,
-            // userName: context
-            //     .read<UserProfileProvider>()
-            //     .userProfileModel!
-            //     .name
-            //     .toString(),
-            events: ZegoUIKitPrebuiltCallEvents(
-              onError: (e){
-                print("astro error{$e}");
-              },
-              room: ZegoCallRoomEvents(
-                onTokenExpired: (e){
+    return Scaffold(
+      body: SafeArea(
+        top: true,
+        child: Stack(
+          children: [
+            ZegoUIKitPrebuiltCall(
+              appID: ZegoKeys.appID,
+              appSign: ZegoKeys.appSign,
+              userID: widget.userid,
+              userName: context
+                  .read<UserProfileProvider>()
+                  .userProfileModel!
+                  .name
+                  .toString()
+                  .split(' ')
+                  .first,
+              callID: widget.callID,
+              // userID: widget.userid,
+              // callID: widget.callID,
+              // userName: context
+              //     .read<UserProfileProvider>()
+              //     .userProfileModel!
+              //     .name
+              //     .toString(),
+              events: ZegoUIKitPrebuiltCallEvents(
+                onError: (e) {
                   print("astro error{$e}");
                 },
-                onStateChanged: (e){
+                room: ZegoCallRoomEvents(onTokenExpired: (e) {
                   print("astro error{$e}");
-                }
-              ),
-              user: ZegoCallUserEvents(
-                onEnter: (p) {
-                  showToast(p.name.toString() + " join in call");
-                  context.read<SessionProvider>().newSession(RequestType.Video);
-                },
-              ),
-              onCallEnd: (event, defaultAction) {
-                showToast("Video Call End");
-                context.read<SocketProvider>().onWorkEnd();
-                navigateme.pop();
-                navigateme.pushAndRemoveUntil(
-                  routeMe(
-                      EndVideoSession(communicationId: widget.communicationId)),
-                      (Route<dynamic> route) => false,
-                );
-                // navigateme.push(routeMe(const EndVideoSession()));
-              },
-            ),
-            config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
-              ..layout = ZegoLayout.pictureInPicture()
-              ..beauty,
-          ),
-          SizedBox(
-            height: 60,
-            child: AppBar(
-              leading: const SizedBox(),
-              backgroundColor: Colors.transparent,
-              surfaceTintColor: Colors.transparent,
-              actions: [
-                IconButton(
-                    onPressed: () {
-                      navigateme.push(routeMe(KundliForm(
-                        id: int.parse(widget.userid),
-                      )));
-                    },
-                    icon: const Icon(
-                      FontAwesomeIcons.info,
-                      color: Colors.white,
-                    ))
-              ],
-            ),
-          ),
-          Positioned(
-            top: 10,
-            left: 10,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [
-                    Color.fromARGB(255, 125, 122, 122),
-                    Color.fromARGB(151, 234, 231, 227)
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+                }, onStateChanged: (e) {
+                  print("astro error{$e}");
+                  // When room state changes, remove connecting overlay
+                  if (mounted && _isConnecting) {
+                    setState(() {
+                      _isConnecting = false;
+                    });
+                  }
+                  if (!_timerStarted) {
+                    _startCountdownTimer();
+                  }
+                }),
+                user: ZegoCallUserEvents(
+                  onEnter: (p) {
+                    showToast(p.name.toString() + " join in call");
+                    context
+                        .read<SessionProvider>()
+                        .newSession(RequestType.Video);
+                    if (mounted) {
+                      setState(() {
+                        _isConnecting = false;
+                      });
+                    }
+                    if (!_timerStarted) {
+                      _startCountdownTimer();
+                    }
+                  },
                 ),
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    offset: const Offset(2, 4),
-                    blurRadius: 6,
-                  ),
-                ],
+                onCallEnd: (event, defaultAction) {
+                  // Stop timer immediately on call end
+                  _timer?.cancel();
+                  _timerStarted = false;
+                  showToast("Video Call End");
+                  context.read<SocketProvider>().onWorkEnd();
+                  navigateme.pop();
+                  navigateme.pushAndRemoveUntil(
+                    routeMe(EndVideoSession(
+                        communicationId: widget.communicationId)),
+                    (Route<dynamic> route) => false,
+                  );
+                  // navigateme.push(routeMe(const EndVideoSession()));
+                },
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(
-                    Icons.timer_outlined,
-                    color: Colors.white,
-                    size: 24,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    formatTime(_remainingSeconds),
-                    style:  GoogleFonts.inter(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      decoration: TextDecoration.none,
-                    ),
-                  ),
-                ],
+              config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+                ..layout = ZegoLayout.pictureInPicture(),
+            ),
+            SafeArea(
+              child: SizedBox(
+                height: 60,
+                child: AppBar(
+                  leading: const SizedBox(),
+                  backgroundColor: Colors.transparent,
+                  surfaceTintColor: Colors.transparent,
+                  actions: [
+                    IconButton(
+                        onPressed: () {
+                          navigateme.push(routeMe(KundliForm(
+                            id: int.parse(widget.userid),
+                          )));
+                        },
+                        icon: const Icon(
+                          FontAwesomeIcons.info,
+                          color: Colors.white,
+                        ))
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+            if (!_isConnecting && _timerStarted) SafeArea(
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Container(
+                  margin: const EdgeInsets.all(20),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color.fromARGB(255, 125, 122, 122),
+                        Color.fromARGB(151, 234, 231, 227)
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        offset: const Offset(2, 4),
+                        blurRadius: 6,
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(
+                        Icons.timer_outlined,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        formatTime(_remainingSeconds),
+                        style: GoogleFonts.inter(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.none,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            if (_isConnecting)
+              const SafeArea(
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CircularProgressIndicator(),
+                      SizedBox(height: 12),
+                      Text(
+                        "Please wait, we are connecting...",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

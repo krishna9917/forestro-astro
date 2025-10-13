@@ -35,6 +35,7 @@ class HomeTabView extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
                 readOnly: true,
+                textCapitalization: TextCapitalization.words,
                 onTap: () {
                   navigateme.push(routeMe(const SearchRequestScreen()));
                 },
@@ -98,7 +99,7 @@ class HomeTabView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                         Text(
+                        Text(
                           'No Chat Or Call Request Today',
                           style: GoogleFonts.inter(
                             color: Color(0xFF201F1F),
@@ -106,7 +107,7 @@ class HomeTabView extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                         Padding(
+                        Padding(
                           padding: EdgeInsets.all(20),
                           child: Text(
                             'Our team will review your profile and notify you once it has been approved. Thank you for your patience.',
@@ -120,7 +121,6 @@ class HomeTabView extends StatelessWidget {
                         ),
                         ElevatedButton(
                           onPressed: () {
-
                             state.reloadComunication(isReload: true);
                           },
                           child: state.reloading

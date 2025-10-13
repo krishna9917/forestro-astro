@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fore_astro_2/Components/RequestBox.dart';
 import 'package:fore_astro_2/core/data/model/CommunicationModel.dart';
+import 'package:fore_astro_2/core/data/repository/communicationRepo.dart';
 import 'package:fore_astro_2/core/data/repository/profileRepo.dart';
 import 'package:fore_astro_2/core/helper/Navigate.dart';
 import 'package:fore_astro_2/core/helper/helper.dart';
@@ -68,9 +69,6 @@ class SocketProvider with ChangeNotifier {
     socket?.on('request', (data) async {
       var getwallet = data['data']['user_wallet'];
       wallet = double.tryParse(getwallet.toString()) ?? 0.0;
-      Logger().t(data,
-          stackTrace: StackTrace.fromString("New Request From Socket"));
-      print("data===============$data");
       if (iAmWorkScreen == false) {
         final duration = await player.setAsset('assets/alert.mp3');
         player.play();
@@ -92,7 +90,6 @@ class SocketProvider with ChangeNotifier {
 
     socket?.on("wetting", (data) {
       player.stop();
-      print("wallet===============$data");
       // if (_iAmWorkScreen) {
       //   socket?.emit("decline", data);
       //   return;
@@ -105,7 +102,6 @@ class SocketProvider with ChangeNotifier {
       }
 
       _isWettingAlertOpen = true;
-      print("walletwetting===============$data");
       showAlertPopup(
         navigate.currentContext!,
         title: "Waiting For Confirmation",
@@ -124,9 +120,7 @@ class SocketProvider with ChangeNotifier {
     });
 
     socket?.on("wettingDecline", (data) {
-      print("=========================$data");
       player.stop();
-      print("Reject");
       // if (!iAmWorkScreen) {
       //   if (navigateme.canPop()) {
       //     // for close popup
@@ -138,75 +132,75 @@ class SocketProvider with ChangeNotifier {
     });
 
     socket?.on('openSession', (data) async {
-      print("emiitdatauser${data}");
+      try {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        String? astroId = prefs.getString("id");
 
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? id = prefs.getString("id");
-
-      // Logger().t(data,
-      //     stackTrace: StackTrace.fromString("openSession From Socket"));
-      print("dataopen===============$data");
-
-      if (iAmWorkScreen) {
-        socket?.emit("userBusy", {
-          'userId': id.toString(),
-          'userType': 'astro',
-          'message': 'fdgdsfdsfdsf',
-          'requestType': data['requestType'],
-          'data': data['data'],
-        });
-        return false;
-      } else {
-        _iAmWorkScreen = true;
-        _workdata = data;
-        communicationProvider.nextSlots();
-        notifyListeners();
-      }
-      snackbarKey.currentState?.hideCurrentSnackBar();
-      if (navigateme.canPop()) {
-        // for close Wetting popup
-        navigateme.pop();
-      }
-      _isWettingAlertOpen = false;
-      if (data['requestType'] == "chat") {
-        print("data_for_chat$data");
-        navigateme.push(routeMe(ChatScreen(
-          id: "${data['userId']}-user",
-          communicationId: data['data']["id"].toString(),
-          userId: data['userId'],
-          user_wallet: wallet,
-        )));
-      } else if (data['requestType'] == "video") {
-        navigateme.push(
-          routeMe(
-            VideoCallScreen(
-              communicationId: data['data']['id'].toString(),
-              callID: data['data']['communication_id'],
-              userid: data['userId'],
-              user_wallet: wallet,
+        final sessionData = (data['data'] as Map?) ?? {};
+        final walletStr = sessionData['walletAmount']?.toString() ?? '0';
+        wallet = double.tryParse(walletStr) ?? 0;
+        if (iAmWorkScreen) {
+          socket?.emit("userBusy", {
+            'userId': astroId.toString(),
+            'userType': 'astro',
+            'message': 'busy',
+            'requestType': data['requestType'],
+            'data': data['data'],
+          });
+          return false;
+        } else {
+          _iAmWorkScreen = true;
+          _workdata = data;
+          communicationProvider.nextSlots();
+          notifyListeners();
+        }
+        snackbarKey.currentState?.hideCurrentSnackBar();
+        if (navigateme.canPop()) {
+          // for close Wetting popup
+          navigateme.pop();
+        }
+        _isWettingAlertOpen = false;
+        if (data['requestType'] == "chat") {
+          navigateme.push(routeMe(ChatScreen(
+            id: "${data['userId']}-user",
+            communicationId: data['data']["id"].toString(),
+            userId: data['userId'],
+            user_wallet: wallet,
+          )));
+        } else if (data['requestType'] == "video") {
+          // Ensure astro joins as themselves in Zego
+          navigateme.push(
+            routeMe(
+              VideoCallScreen(
+                communicationId: data['data']['id'].toString(),
+                callID: data['data']['communication_id'],
+                userid: "astro_" + (astroId ?? data['userId'].toString()),
+                user_wallet: wallet,
+              ),
             ),
-          ),
-        );
-      } else if (data['requestType'] == "audio") {
-        navigateme.push(
-          routeMe(
-            AudioCallScreen(
-              communicationId: data['data']['id'].toString(),
-              callID: data['data']['communication_id'],
-              userid: data['userId'],
-              user_wallet: wallet,
+          );
+        } else if (data['requestType'] == "audio") {
+          navigateme.push(
+            routeMe(
+              AudioCallScreen(
+                communicationId: data['data']['id'].toString(),
+                callID: data['data']['communication_id'],
+                userid: "astro_" + (astroId ?? data['userId'].toString()),
+                user_wallet: wallet,
+              ),
             ),
-          ),
-        );
-      } else {
-        _iAmWorkScreen = false;
-        notifyListeners();
-        showToast("Unknown Request Type");
+          );
+        } else {
+          _iAmWorkScreen = false;
+          notifyListeners();
+          showToast("Unknown Request Type");
+        }
+      } catch (e) {
+        // Only log errors per requirement
+        Logger().e('openSession handling failed', error: e);
       }
     });
-    socket?.on('startSession', (data) {
-      print("Start session data received: $data");
-    });
+    socket?.on('startSession', (data) {});
     socket?.on('busy', (data) {
       Logger().t(data, stackTrace: StackTrace.fromString("busy From Socket"));
       showToast("Sorry, User is Busy with other Astrologer.Please Try Later");
@@ -214,13 +208,7 @@ class SocketProvider with ChangeNotifier {
 // Handle socket disconnection
     socket?.on('disconnect', (data) => {endLiveSession()});
     socket?.on("closeSession", (data) {
-      print("dattttttttttttt=============$data");
       var communicationId = data['data']['communication_id'];
-      print("comunicayion===================$communicationId");
-
-      print("colose_sesiondatattttttttt$data");
-      Logger().t(data,
-          stackTrace: StackTrace.fromString("closeSession From Socket"));
       if (iAmWorkScreen) {
         _workdata = null;
         _iAmWorkScreen = false;
@@ -267,7 +255,7 @@ class SocketProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void acceptORrejectRequest(
+  Future<void> acceptORrejectRequest(
     String emit, {
     required String senderId,
     required String requestType,
@@ -275,14 +263,25 @@ class SocketProvider with ChangeNotifier {
     required String status,
     required CommunicationModel communicationModel,
     required Map data,
-  }) {
-    print('comunucationnnnnnnnnnn: $data');
+  }) async {
+    // remove noisy prints
     if (status.toLowerCase() == "reject") {
-      print(communicationId);
+      // Stop ringing sound when rejecting
+      try {
+        await player.stop();
+      } catch (_) {}
+      // Persist rejection on server to prevent it from returning on refresh
+      try {
+        await CommunicationRepo.acceptOrRejectRequest(
+            communicationId: communicationId, status: status);
+      } catch (e) {
+        // Intentionally ignore to avoid blocking UI removal; server will reconcile later
+      }
+      //
       if (requestType == "chat") {
         communicationProvider.removeFormChat(int.parse(communicationId));
       } else {
-        print("test");
+        //
         communicationProvider.removeFormCall(int.parse(communicationId));
       }
       communicationProvider.nextSlots();
@@ -299,16 +298,7 @@ class SocketProvider with ChangeNotifier {
       },
     });
 
-    print('dataaacpect===============${{
-      'userId': senderId,
-      'userType': 'user',
-      'requestType': requestType,
-      'data': {
-        ...communicationModel.toJson(),
-        "status": status,
-        ...data,
-      },
-    }}');
+    //
   }
 
   void closeSession(
@@ -374,7 +364,7 @@ class SocketProvider with ChangeNotifier {
     try {
       await ProfileRepo.astroLogout();
     } catch (e) {
-      print(e);
+      Logger().e('astroLogout failed', error: e);
     }
   }
 }

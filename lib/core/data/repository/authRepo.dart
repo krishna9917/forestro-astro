@@ -41,6 +41,8 @@ class AuthRepo {
             "version": "$_version $_buildNumber",
           },
         ),
+        // if server redirects 302 to login-error, do not logout here
+        ignoreUnauthorized: true,
       );
       print("apiRequest: ${apiRequest.body}");
       return await apiRequest.send<T>();

@@ -118,6 +118,7 @@ class InputBox extends StatelessWidget {
         ),
         TextFormField(
           controller: controller,
+          textCapitalization: TextCapitalization.words,
           validator: validator,
           decoration: InputDecoration(
             fillColor: Color.fromARGB(164, 255, 255, 255),

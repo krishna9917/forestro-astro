@@ -55,35 +55,35 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
     //     ? (widget.user_wallet / chatRatePerMinute * 60).toInt()
     //     : 0;
 
-    _remainingSeconds = chatRatePerMinute > 0
-        ? (widget.user_wallet / chatRatePerMinute * 60).ceil()
-        : 0;
+    // Round down wallet to nearest divisible by per-minute charge
+    double totalWallet = widget.user_wallet;
+    double perMin = chatRatePerMinute;
+    double usableWallet = (totalWallet ~/ perMin) * perMin; // floor to divisible
+    _remainingSeconds = perMin > 0 ? ((usableWallet / perMin) * 60).toInt() : 0;
 
-    context.read<SessionProvider>().newSession(RequestType.Chat);
+    // Correct session type for audio
+    context.read<SessionProvider>().newSession(RequestType.Audio);
     requestToAccpted();
 
-    _startCountdownTimer();
     super.initState();
   }
 
   void _startCountdownTimer() {
     _timer?.cancel();
-    print("Starting countdown timer with $_remainingSeconds seconds.");
+    // Remove noisy logs
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
       if (_remainingSeconds > 0) {
         setState(() {
           _remainingSeconds--;
-          print("Remaining seconds: $_remainingSeconds");
         });
-
         if (_remainingSeconds == 120 && !_isBeeping) {
           _isBeeping = true;
           await _playBeepSound();
           _isBeeping = false;
         }
-      } else {
+      } else if (_remainingSeconds == 0) {
         timer.cancel();
-        print("Countdown finished.");
+        await _endCallSession();
       }
     });
   }
@@ -96,7 +96,8 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
         await Future.delayed(const Duration(milliseconds: 500));
       }
     } catch (e) {
-      print('Audio play error: $e');
+      // Only log errors
+      debugPrint('Audio play error: $e');
     }
   }
 
@@ -156,10 +157,6 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (!_isTimerStarted) {
-      _startCountdownTimer();
-      _isTimerStarted = true;
-    }
   }
 
   @override
@@ -168,9 +165,8 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
       child: Stack(
         children: [
           ZegoUIKitPrebuiltCall(
-              appID: 844833851,
-              appSign:
-                  '136a48b12cd722234938f6d8613362686b991c1e50784524851803fb7fdab1ab',
+              appID: ZegoKeys.appID,
+              appSign: ZegoKeys.appSign,
               userID: widget.userid,
               userName: context
                   .read<UserProfileProvider>()
@@ -180,12 +176,24 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
                   .split(' ')
                   .first,
               events: ZegoUIKitPrebuiltCallEvents(
+                room: ZegoCallRoomEvents(
+                  onStateChanged: (e) {
+                    if (!_isTimerStarted) {
+                      _startCountdownTimer();
+                      _isTimerStarted = true;
+                    }
+                  },
+                ),
                 user: ZegoCallUserEvents(
                   onEnter: (p) {
                     showToast(p.name.toString() + " join in call");
                     context
                         .read<SessionProvider>()
                         .newSession(RequestType.Audio);
+                    if (!_isTimerStarted) {
+                      _startCountdownTimer();
+                      _isTimerStarted = true;
+                    }
                   },
                 ),
                 onCallEnd: (event, defaultAction) async {

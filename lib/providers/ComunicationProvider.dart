@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fore_astro_2/core/data/model/CommunicationModel.dart';
 import 'package:fore_astro_2/core/data/repository/communicationRepo.dart';
+import 'package:fore_astro_2/core/helper/Navigate.dart';
+import 'package:fore_astro_2/screens/common/NoInternetScreen.dart';
 
 class CommunicationProvider with ChangeNotifier {
   List<CommunicationModel>? _chats;
@@ -10,6 +13,7 @@ class CommunicationProvider with ChangeNotifier {
   List<CommunicationModel>? _todayLogs;
   int _currentSlots = 0;
   bool _reloading = false;
+  final Set<int> _statusUpdatedIds = <int>{};
 
   List<CommunicationModel>? get chats => _chats;
   List<CommunicationModel>? get calls => _calls;
@@ -33,6 +37,12 @@ class CommunicationProvider with ChangeNotifier {
         int count = 0;
 
         for (var element in data) {
+          // Only show pending requests in lists
+          final status = element['status']?.toString().toLowerCase();
+          if (status != null && status != 'pending') {
+            continue;
+          }
+
           if (element['type'].toString() == "chat") {
             chats.add(CommunicationModel.fromJson({...element, 'slot': count}));
           } else {
@@ -69,6 +79,17 @@ class CommunicationProvider with ChangeNotifier {
       _calls?.forEach(startTimerForItem);
 
       notifyListeners();
+    } on DioException catch (_) {
+      _calls = [];
+      _chats = [];
+      notifyListeners();
+    } on SocketException catch (_) {
+      _calls = [];
+      _chats = [];
+      notifyListeners();
+      try {
+        navigateme.push(routeMe(const NoInternetScreen()));
+      } catch (_) {}
     } catch (e) {
       _calls = [];
       _chats = [];
@@ -78,6 +99,12 @@ class CommunicationProvider with ChangeNotifier {
 
   Future reloadComunication({bool? isReload}) async {
     try {
+      // Skip reload if not authenticated yet
+      // (prevents 401 spam and unnecessary UI churn during splash/login)
+      // Note: Repositories read id/token from SharedPreferences internally
+      // so this fast short-circuit avoids wasted calls.
+      // If needed, a more robust auth state can be injected.
+      // For now, we proceed directly to loadData which will throw on 401.
       if (isReload == true) {
         _reloading = true;
         notifyListeners();
@@ -94,6 +121,16 @@ class CommunicationProvider with ChangeNotifier {
 
       _reloading = false;
       notifyListeners();
+    } on DioException catch (e) {
+      print(e);
+      _reloading = false;
+      notifyListeners();
+    } on SocketException catch (_) {
+      _reloading = false;
+      notifyListeners();
+      try {
+        navigateme.push(routeMe(const NoInternetScreen()));
+      } catch (_) {}
     } catch (e) {
       print(e);
       _reloading = false;
@@ -141,49 +178,22 @@ class CommunicationProvider with ChangeNotifier {
 
   /// ✅ हर item के लिए timer start
   void startTimerForItem(CommunicationModel model) {
-    if (model.time == null) return;
-
     try {
-      final parts = model.time!.split(":"); // ["12", "00 AM"]
-      int hour = int.parse(parts[0]);       // "12"
-      final minuteParts = parts[1].trim().split(" "); // ["00", "AM"]
-      int minute = int.parse(minuteParts[0]);
-      String period = minuteParts[1].toUpperCase();   // "AM" or "PM"
-
-      // 🔥 Proper AM/PM conversion
-      if (period == "AM") {
-        if (hour == 12) {
-          hour = 0; // 12 AM -> 0 hour
-        }
-      } else if (period == "PM") {
-        if (hour != 12) {
-          hour += 12; // 1PM -> 13, ... 11PM -> 23
-        }
-      }
-
-      DateTime scheduledTime = DateTime(
-        DateTime.now().year,
-        DateTime.now().month,
-        DateTime.now().day,
-        hour,
-        minute,
-      );
-
-      model.timer?.cancel(); // पहले से चल रहा हो तो बंद करो
+      model.timer?.cancel();
+      model.elapsedSeconds = 0;
 
       model.timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-        final now = DateTime.now();
-        model.elapsedSeconds = now.difference(scheduledTime).inSeconds;
+        model.elapsedSeconds = (model.elapsedSeconds) + 1;
+        notifyListeners();
 
-        notifyListeners(); // UI update करो
-
-        if (model.elapsedSeconds > 60 && model.status == "pending") {
+        // Auto-misscall strictly after 30 seconds of no action from astro
+        if (model.elapsedSeconds >= 30 && (model.status ?? '').toLowerCase() == 'pending' && !_statusUpdatedIds.contains(model.id)) {
           timer.cancel();
           updateStatusAndRemove(model);
         }
       });
     } catch (e) {
-      debugPrint("Time parse error: ${model.time} -> $e");
+      debugPrint("Timer start error: $e");
     }
   }
 
@@ -191,10 +201,16 @@ class CommunicationProvider with ChangeNotifier {
   /// ✅ Status Update + Remove
   Future<void> updateStatusAndRemove(CommunicationModel model) async {
     try {
+      if (_statusUpdatedIds.contains(model.id ?? -1)) return;
+      if ((model.status ?? '').toLowerCase() != 'pending') {
+        _statusUpdatedIds.add(model.id ?? -1);
+        return;
+      }
       await CommunicationRepo.acceptOrRejectRequest(
           communicationId: model.id.toString(),
           status: 'misscall'
-      ); // तुम्हारी API
+      );
+      _statusUpdatedIds.add(model.id ?? -1);
     } catch (e) {
       print("Error updating status: $e");
     }

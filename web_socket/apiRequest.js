@@ -25,7 +25,7 @@ import axios from "axios";
 export const request = async ({ method, url, data, token }) => {
   try {
     const response = await axios.request({
-      baseURL: "https://foreastro.technovaedge.in/api",
+      baseURL: "https://foreastro.com/api",
 //      baseURL: "https://foreastro.com/api",
       url,
       method,

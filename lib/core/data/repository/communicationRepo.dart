@@ -7,6 +7,10 @@ import '../../../screens/splash/SplashScreen.dart';
 import '../../helper/Navigate.dart';
 
 class CommunicationRepo {
+  // In-memory guards to ensure one final status update per communication_id
+  static final Map<String, String> _finalStatusByCommunicationId = {};
+  static final Set<String> _inFlightCommunicationIds = <String>{};
+
   // "https://foreastro.bonwic.cloud/api/get-communication-call-request?astro_id=46"
   static Future<Response> loadChatCallRequest<T>() async {
     try {
@@ -29,10 +33,22 @@ class CommunicationRepo {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? id = prefs.getString("id");
+      String? token = prefs.getString("token");
+
+      if (id == null || id.isEmpty || token == null || token.isEmpty) {
+        // Return an empty response shape to avoid 401s until auth is ready
+        return Response(
+          requestOptions:
+              RequestOptions(path: "$apiUrl/all-communication-request"),
+          data: {"status": true, "data": []},
+          statusCode: 200,
+        );
+      }
 
       ApiRequest apiRequest = ApiRequest(
         "$apiUrl/all-communication-request?astro_id=$id",
         method: ApiMethod.GET,
+        ignoreUnauthorized: true,
       );
       return await apiRequest.send<T>();
     } catch (e) {
@@ -55,16 +71,58 @@ class CommunicationRepo {
   static Future<Response> acceptOrRejectRequest<T>(
       {required String communicationId, required String status}) async {
     try {
+      final String key = communicationId.toString();
+
+      // If already finalized (accept/reject/misscall), skip duplicate updates
+      if (_finalStatusByCommunicationId.containsKey(key)) {
+        print(
+            "Status update skipped ---> {communication_id: $key, status: $status} already ${_finalStatusByCommunicationId[key]}");
+        return Response(
+          requestOptions:
+              RequestOptions(path: "$apiUrl/update-communication-status"),
+          data: {"status": true, "skipped": true, "communication_id": key},
+          statusCode: 200,
+        );
+      }
+
+      // If a request is already in-flight for this ID, skip duplicates
+      if (_inFlightCommunicationIds.contains(key)) {
+        print(
+            "Status update dedup in-flight ---> {communication_id: $key, status: $status}");
+        return Response(
+          requestOptions:
+              RequestOptions(path: "$apiUrl/update-communication-status"),
+          data: {"status": true, "skipped": true, "communication_id": key},
+          statusCode: 200,
+        );
+      }
+
+      _inFlightCommunicationIds.add(key);
+
       ApiRequest apiRequest = ApiRequest("$apiUrl/update-communication-status",
           method: ApiMethod.POST,
           body: packFormData({
             "communication_id": communicationId,
             "status": status,
           }));
-      return await apiRequest.send<T>();
+      print("Status update ---> ${{
+        "communication_id": communicationId,
+        "status": status,
+      }}");
+      final Response res = await apiRequest.send<T>();
+
+      // Mark as finalized only if server accepted the update
+      if (res.statusCode == 200 ||
+          res.statusCode == 201 ||
+          (res.data is Map && (res.data['status'] == true))) {
+        _finalStatusByCommunicationId[key] = status;
+      }
+      return res;
     } catch (e) {
       print(e);
       rethrow;
+    } finally {
+      _inFlightCommunicationIds.remove(communicationId.toString());
     }
   }
 
