@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "683196372486",
+    "project_id": "astro-99c72",
+    "storage_bucket": "astro-99c72.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683196372486:android:2c1fb256f43e3098b15587",
+        "android_client_info": {
+          "package_name": "com.foreastro.astro"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsT7xnQ0Kt77BZZF3UQ-uuP1TyKUOy_ak"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683196372486:android:ff2329751a56d47ab15587",
+        "android_client_info": {
+          "package_name": "com.foreastro.astrologer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsT7xnQ0Kt77BZZF3UQ-uuP1TyKUOy_ak"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683196372486:android:26fe5d72a43e256fb15587",
+        "android_client_info": {
+          "package_name": "com.foreastro.foreastro"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsT7xnQ0Kt77BZZF3UQ-uuP1TyKUOy_ak"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
