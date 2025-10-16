@@ -26,8 +26,8 @@ ios/Pods/
 *.xcworkspace
 DerivedData/
 
-# Firebase/Secrets
-android/app/google-services.json
-ios/Runner/GoogleService-Info.plist
-firebase.json
+#DerivedData# Firebase/Secrets
+#android/app/google-services.json
+#ios/Runner/GoogleService-Info.plist
+#firebase.json
 
