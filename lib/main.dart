@@ -56,6 +56,7 @@ void main(List<String> args) async {
     statusBarColor: Colors.transparent,
   ));
 
+
   runApp(
     MultiProvider(
       providers: [
