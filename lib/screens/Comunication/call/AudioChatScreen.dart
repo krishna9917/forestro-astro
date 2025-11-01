@@ -210,7 +210,7 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
                 },
               ),
               callID: widget.callID,
-              config: ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall()),
+              config: ZegoUIKitPrebuiltCallConfig.groupVoiceCall()),
           Center(child: Image.asset("assets/call_logo.jpg")),
           // Container(
           //   decoration: const BoxDecoration(

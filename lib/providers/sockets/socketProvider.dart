@@ -63,6 +63,10 @@ class SocketProvider with ChangeNotifier {
   }
 
   addSocketListeners() {
+    socket?.on('connect', (_) => Logger().i('[socket] connected'));
+    socket?.on('connected', (data) => Logger().i('[socket] server ack: $data'));
+    socket?.on('connect_error', (e) => Logger().e('[socket] connect_error', error: e));
+    socket?.on('error', (e) => Logger().e('[socket] error', error: e));
     // socket?.on('startSession', (data) {
     //   print("Start session data received: $data");
     // });

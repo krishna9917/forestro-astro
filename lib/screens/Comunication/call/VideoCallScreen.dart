@@ -211,7 +211,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                   // navigateme.push(routeMe(const EndVideoSession()));
                 },
               ),
-              config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+              config: ZegoUIKitPrebuiltCallConfig.groupVideoCall()
                 ..layout = ZegoLayout.pictureInPicture(),
             ),
             SafeArea(
