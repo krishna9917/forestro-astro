@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fore_astro_2/constants/Assets.dart';
 import 'package:fore_astro_2/core/theme/Colors.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -55,7 +54,7 @@ ThemeData appTheme = ThemeData(
       elevation: 0,
       backgroundColor: AppColor.bgcolor,
       surfaceTintColor: Colors.transparent,
-      titleTextStyle:  GoogleFonts.inter(
+      titleTextStyle: GoogleFonts.inter(
           fontWeight: FontWeight.bold, color: Colors.black, fontSize: 18),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
@@ -69,7 +68,7 @@ ThemeData appTheme = ThemeData(
             side: BorderSide.none,
           ),
         ),
-        textStyle:  MaterialStatePropertyAll(
+        textStyle: MaterialStatePropertyAll(
           GoogleFonts.inter(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -96,7 +95,8 @@ ThemeData appTheme = ThemeData(
         ),
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
-        textStyle: MaterialStatePropertyAll(GoogleFonts.inter(color: AppColor.primary)),
+        textStyle: MaterialStatePropertyAll(
+            GoogleFonts.inter(color: AppColor.primary)),
         foregroundColor: MaterialStatePropertyAll(AppColor.primary),
         surfaceTintColor: MaterialStatePropertyAll(Colors.transparent),
         splashFactory: NoSplash.splashFactory,
@@ -107,8 +107,8 @@ ThemeData appTheme = ThemeData(
     drawerTheme: const DrawerThemeData(
       backgroundColor: Colors.white,
       elevation: 0.0,
-    ),
-    bottomAppBarTheme: const BottomAppBarTheme(
+      ),
+    bottomAppBarTheme: const BottomAppBarThemeData(
       color: Colors.white,
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(

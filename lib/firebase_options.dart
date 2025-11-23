@@ -47,7 +47,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '683196372486',
     projectId: 'astro-99c72',
     authDomain: 'astro-99c72.firebaseapp.com',
-    storageBucket: 'astro-99c72.appspot.com',
+    storageBucket: 'astro-99c72.firebasestorage.app',
     measurementId: 'G-HVD4SG93W9',
   );
 
@@ -56,7 +56,7 @@ class DefaultFirebaseOptions {
     appId: '1:683196372486:android:ff2329751a56d47ab15587',
     messagingSenderId: '683196372486',
     projectId: 'astro-99c72',
-    storageBucket: 'astro-99c72.appspot.com',
+    storageBucket: 'astro-99c72.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -64,7 +64,9 @@ class DefaultFirebaseOptions {
     appId: '1:683196372486:ios:683d6fcd1cef9f2db15587',
     messagingSenderId: '683196372486',
     projectId: 'astro-99c72',
-    storageBucket: 'astro-99c72.appspot.com',
+    storageBucket: 'astro-99c72.firebasestorage.app',
+    androidClientId: '683196372486-1id05d3drs86huk81nnnek4iupjjm7ga.apps.googleusercontent.com',
+    iosClientId: '683196372486-5mr29dl6vq3jbll2t7n4qtaffhfgaakn.apps.googleusercontent.com',
     iosBundleId: 'com.foreastro.astrologer',
   );
 
@@ -73,7 +75,9 @@ class DefaultFirebaseOptions {
     appId: '1:683196372486:ios:7aa473b1af176d2ab15587',
     messagingSenderId: '683196372486',
     projectId: 'astro-99c72',
-    storageBucket: 'astro-99c72.appspot.com',
+    storageBucket: 'astro-99c72.firebasestorage.app',
+    androidClientId: '683196372486-1id05d3drs86huk81nnnek4iupjjm7ga.apps.googleusercontent.com',
+    iosClientId: '683196372486-ppl01akf4pq9mgiobu8q28m3isfp908r.apps.googleusercontent.com',
     iosBundleId: 'com.example.foreAstro2',
   );
 
@@ -83,9 +87,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '683196372486',
     projectId: 'astro-99c72',
     authDomain: 'astro-99c72.firebaseapp.com',
-    storageBucket: 'astro-99c72.appspot.com',
+    storageBucket: 'astro-99c72.firebasestorage.app',
     measurementId: 'G-LKN9PQKCV5',
   );
+
 }
 
 FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;

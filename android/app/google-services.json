@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "683196372486",
     "project_id": "astro-99c72",
-    "storage_bucket": "astro-99c72.appspot.com"
+    "storage_bucket": "astro-99c72.firebasestorage.app"
   },
   "client": [
     {
@@ -12,7 +12,28 @@
           "package_name": "com.foreastro.astro"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "683196372486-9bqu3lbtnqn1d41pq69c6hqebphugdsc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.foreastro.astro",
+            "certificate_hash": "1162f57f8de46c3808aeb28696d2a6977c9a2dfc"
+          }
+        },
+        {
+          "client_id": "683196372486-9uk1n6pkj3c3id08r6mstd1p3mru5rh6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.foreastro.astro",
+            "certificate_hash": "f881879117ad09680ef181a652ccad4e88d34364"
+          }
+        },
+        {
+          "client_id": "683196372486-olnbepe4jmlg3qa9m35hdb38362d4ov0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDsT7xnQ0Kt77BZZF3UQ-uuP1TyKUOy_ak"
@@ -20,7 +41,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "683196372486-olnbepe4jmlg3qa9m35hdb38362d4ov0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "683196372486-5mr29dl6vq3jbll2t7n4qtaffhfgaakn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.foreastro.astrologer"
+              }
+            }
+          ]
         }
       }
     },
@@ -31,7 +64,28 @@
           "package_name": "com.foreastro.astrologer"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "683196372486-1id05d3drs86huk81nnnek4iupjjm7ga.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.foreastro.astrologer",
+            "certificate_hash": "1162f57f8de46c3808aeb28696d2a6977c9a2dfc"
+          }
+        },
+        {
+          "client_id": "683196372486-amdavh464p8fnnps0ruvjlv59h5bg6m3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.foreastro.astrologer",
+            "certificate_hash": "975c9ef918463271e5b6685776e66e4b7b803847"
+          }
+        },
+        {
+          "client_id": "683196372486-olnbepe4jmlg3qa9m35hdb38362d4ov0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDsT7xnQ0Kt77BZZF3UQ-uuP1TyKUOy_ak"
@@ -39,7 +93,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "683196372486-olnbepe4jmlg3qa9m35hdb38362d4ov0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "683196372486-5mr29dl6vq3jbll2t7n4qtaffhfgaakn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.foreastro.astrologer"
+              }
+            }
+          ]
         }
       }
     },
@@ -50,7 +116,36 @@
           "package_name": "com.foreastro.foreastro"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "683196372486-lq95re1kpp5poua45bgvh4rndpgr192o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.foreastro.foreastro",
+            "certificate_hash": "7ac60694c0b66f72ec7b98b6afe1850403358e5d"
+          }
+        },
+        {
+          "client_id": "683196372486-okcjl10euf1ppmd0sj9m2vop0nnei9sf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.foreastro.foreastro",
+            "certificate_hash": "8cb8ef7707c34a463d645a82883c3b1f3c416e32"
+          }
+        },
+        {
+          "client_id": "683196372486-t8sfc7fntqf1ncrsj8v57unp937n5ocv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.foreastro.foreastro",
+            "certificate_hash": "f881879117ad09680ef181a652ccad4e88d34364"
+          }
+        },
+        {
+          "client_id": "683196372486-olnbepe4jmlg3qa9m35hdb38362d4ov0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDsT7xnQ0Kt77BZZF3UQ-uuP1TyKUOy_ak"
@@ -58,7 +153,131 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "683196372486-olnbepe4jmlg3qa9m35hdb38362d4ov0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "683196372486-5mr29dl6vq3jbll2t7n4qtaffhfgaakn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.foreastro.astrologer"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683196372486:android:dbc3e518b02a26efb15587",
+        "android_client_info": {
+          "package_name": "com.foreastro.foreastrouser"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "683196372486-n5lio1fna9mkpqgvht6j9i7tpq96ejfb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.foreastro.foreastrouser",
+            "certificate_hash": "f881879117ad09680ef181a652ccad4e88d34364"
+          }
+        },
+        {
+          "client_id": "683196372486-olnbepe4jmlg3qa9m35hdb38362d4ov0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsT7xnQ0Kt77BZZF3UQ-uuP1TyKUOy_ak"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "683196372486-olnbepe4jmlg3qa9m35hdb38362d4ov0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "683196372486-5mr29dl6vq3jbll2t7n4qtaffhfgaakn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.foreastro.astrologer"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683196372486:android:89a415dbb642a146b15587",
+        "android_client_info": {
+          "package_name": "com.foreastro.foreastrouserside"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "683196372486-8b51q1nituuqp9jc94cifb6o1h32bcfp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.foreastro.foreastrouserside",
+            "certificate_hash": "f881879117ad09680ef181a652ccad4e88d34364"
+          }
+        },
+        {
+          "client_id": "683196372486-8pfbo2i6hpfm1p08uhd9mlboohkrtv28.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.foreastro.foreastrouserside",
+            "certificate_hash": "079f11bae046c2279a959dc8f30c0473ee53a870"
+          }
+        },
+        {
+          "client_id": "683196372486-abo53ihqmakmg9spmrbn90jtlqm6ioud.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.foreastro.foreastrouserside",
+            "certificate_hash": "878158a0834af5520f448c895ae306d8e11d07c9"
+          }
+        },
+        {
+          "client_id": "683196372486-gqnuco6h19c5jhvu905ddfop946b41nn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.foreastro.foreastrouserside",
+            "certificate_hash": "69a8497f0c2b59a0664f3b150f69cf047b01b32a"
+          }
+        },
+        {
+          "client_id": "683196372486-olnbepe4jmlg3qa9m35hdb38362d4ov0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsT7xnQ0Kt77BZZF3UQ-uuP1TyKUOy_ak"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "683196372486-olnbepe4jmlg3qa9m35hdb38362d4ov0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "683196372486-5mr29dl6vq3jbll2t7n4qtaffhfgaakn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.foreastro.astrologer"
+              }
+            }
+          ]
         }
       }
     }
