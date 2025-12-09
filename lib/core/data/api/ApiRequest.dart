@@ -1,14 +1,14 @@
 import 'package:dio/dio.dart';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
-import 'package:logger/logger.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // Removed auto-logout navigation
 
 Logger logger = Logger();
+String apiUrl = "https://foreastro.com/api";
 // String apiUrl = "https://foreastro.com/api";
-String apiUrl = "https://foreastro.technovaedge.in/api";
 String apiKundliUrl = "https://api.vedicastroapi.com/v3-json";
 
 const String toastError = "Something Went Wrong!";
@@ -50,7 +50,8 @@ class ApiRequest {
       final FormData original = body as FormData;
       final FormData copy = FormData();
       copy.fields.addAll(List<MapEntry<String, String>>.from(original.fields));
-      copy.files.addAll(List<MapEntry<String, MultipartFile>>.from(original.files));
+      copy.files
+          .addAll(List<MapEntry<String, MultipartFile>>.from(original.files));
       return copy;
     }
     return body;
@@ -83,8 +84,15 @@ class ApiRequest {
 
     try {
       // Avoid network hits completely when offline
-      final List<ConnectivityResult> connectivity = await Connectivity().checkConnectivity();
-      if (connectivity.contains(ConnectivityResult.none)) {
+      final dynamic connectivity = await Connectivity().checkConnectivity();
+      bool isOffline = false;
+      if (connectivity is List<ConnectivityResult>) {
+        isOffline = connectivity.contains(ConnectivityResult.none);
+      } else if (connectivity is ConnectivityResult) {
+        // Older connectivity_plus versions return a single enum.
+        isOffline = connectivity == ConnectivityResult.none;
+      }
+      if (isOffline) {
         throw const SocketException('No Internet connection');
       }
 
@@ -111,12 +119,11 @@ class ApiRequest {
       logger.e(e.response?.data,
           error: e.error, stackTrace: StackTrace.fromString("$method : $url"));
       // Retry once with alternate domain if DNS lookup failed
-      final bool isHostLookupError =
-          e.error is SocketException ||
-              (e.message?.toLowerCase().contains('failed host lookup') ?? false);
-      if (isHostLookupError && url.contains("foreastro.technovaedge.in")) {
+      final bool isHostLookupError = e.error is SocketException ||
+          (e.message?.toLowerCase().contains('failed host lookup') ?? false);
+      if (isHostLookupError && url.contains("foreastro.com")) {
         final String alternateUrl =
-            url.replaceFirst("foreastro.technovaedge.in", "foreastro.com");
+            url.replaceFirst("foreastro.com", "foreastro.com");
         try {
           SharedPreferences sharedPreferences =
               await SharedPreferences.getInstance();
@@ -142,7 +149,8 @@ class ApiRequest {
         } on DioException catch (retryError) {
           logger.e(retryError.response?.data,
               error: retryError.error,
-              stackTrace: StackTrace.fromString("RETRY $method : $alternateUrl"));
+              stackTrace:
+                  StackTrace.fromString("RETRY $method : $alternateUrl"));
           // Surface a network-friendly error to allow UI to route to NoInternet screen
           throw SocketException('Failed host lookup after retry');
         }

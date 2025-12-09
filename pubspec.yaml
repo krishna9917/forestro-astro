@@ -75,6 +75,7 @@ dependencies:
   workmanager: ^0.9.0+3
   flutter_callkit_incoming: ^2.5.5
   zego_express_engine: ^3.22.0
+  connectivity_plus: ^6.1.1
   google_fonts:
     
 dev_dependencies:
